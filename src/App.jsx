@@ -13,7 +13,7 @@ import {
   KanjiPage,
   LevelsPage,
   LoginPage,
-  Profilepage,
+  ProfilePage,
   RegisterPage,
 } from "./pages";
 
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <LevelsPage /> },
       { path: "about", element: <AboutPage /> },
-      { path: "profile", element: <Profilepage /> },
+      { path: "profile", element: <ProfilePage /> },
       { path: "kanji/:level", element: <KanjiPage /> },
       { path: "kanji/detail/:id", element: <KanjiDetailPage /> },
     ],
