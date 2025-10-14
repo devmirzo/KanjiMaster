@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
-import { Error, Loading } from "../components";
+import { Error, Loading, NotFound } from "../components";
 
 const KanjiDetailPage = () => {
   const { id } = useParams();
@@ -10,6 +10,8 @@ const KanjiDetailPage = () => {
   const [kanji, setKanji] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  
 
   useEffect(() => {
     const fetchKanji = async () => {
@@ -34,23 +36,19 @@ const KanjiDetailPage = () => {
 
   if (error)
     return (
-      <Error
-        message={error.message} // Supabase'dan kelgan xabar
-        onRetry={() => window.location.reload()} // Qayta yuklash tugmasi
-      />
+      <Error message={error.message} onRetry={() => window.location.reload()} />
     );
 
   if (!kanji)
-    return (
-      <NotFound
-        message="Kanji topilmadi."
-        onBack={() => navigate(-1)} // Oldingi sahifaga qaytaradi
-      />
-    );
+    return <NotFound message="Kanji topilmadi." onBack={() => navigate(-1)} />;
+
+  const examples = Array.isArray(kanji.examples)
+    ? kanji.examples
+    : JSON.parse(kanji.examples || "[]");
 
   return (
     <div className="min-h-screen bg-[#FCFAEE] p-6">
-      {/* 🔹 Back tugmasi */}
+      {/* 🔹 Orqaga tugma */}
       <button
         onClick={() => navigate(-1)}
         className="mb-6 px-4 py-2 bg-[#384B70] text-[#FCFAEE] rounded-lg hover:bg-[#2C3E5D] transition-colors"
@@ -58,134 +56,123 @@ const KanjiDetailPage = () => {
         ← Orqaga
       </button>
 
-      {/* 🔹 Kanji va tafsilotlar */}
-      <div className="px-4 sm:px-0 mb-6">
-        <h3 className="text-9xl font-light text-[#384B70]">{kanji.kanji}</h3>
-        <p className="mt-9 text-3xl text-gray-900">Kanji tafsilotlari</p>
+      {/* 🔹 Kanji sarlavha */}
+      <div className="text-center mb-8">
+        <h1 className="text-[9rem] font-light text-[#384B70]">
+          {kanji.kanji_text}
+        </h1>
+        <p className="text-2xl text-gray-600">Daraja: {kanji.level}</p>
       </div>
 
-      <div className="mt-6 border-t border-gray-200">
-        <dl className="divide-y divide-gray-200">
-          {/* Onyomi */}
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-3xl font-medium text-gray-500">Onyomi</dt>
-            <dd className="mt-1 text-4xl font-semibold text-gray-900 sm:col-span-2 sm:mt-0">
-              {kanji.onyomi}
-            </dd>
-          </div>
+      {/* 🔹 Asosiy konteyner */}
+      <div className="bg-white rounded-2xl shadow-md p-6 space-y-6">
+        {/* 🎥 + 🖼️ Yozilish tartibi (video + rasmlar) */}
+        {(kanji.stroke_video || kanji.stroke_order_svgs?.length > 0) && (
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-700 mb-3 text-center">
+              Yozilish tartibi
+            </h2>
+            <div className="flex flex-wrap gap-4 justify-center items-center">
+              {/* 🎥 Video (chap tomonda) */}
+              {kanji.stroke_video && (
+                <video
+                  src={kanji.stroke_video}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-40 h-40 object-contain rounded-xl shadow-sm border hover:scale-101 border-gray-300"
+                />
+              )}
 
-          {/* Kunyomi */}
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-3xl font-medium text-gray-500">Kunyomi</dt>
-            <dd className="mt-1 text-4xl font-semibold text-gray-900 sm:col-span-2 sm:mt-0">
-              {kanji.kunyomi}
-            </dd>
-          </div>
-
-          {/* Meaning */}
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-3xl font-medium text-gray-500">Tarjimasi</dt>
-            <dd className="mt-1 text-4xl font-semibold text-gray-900 sm:col-span-2 sm:mt-0">
-              {kanji.meaning}
-            </dd>
-          </div>
-
-          {/* Level */}
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-3xl font-medium text-gray-500">Daraja</dt>
-            <dd className="mt-1 text-4xl font-semibold text-gray-900 sm:col-span-2 sm:mt-0">
-              {kanji.level}
-            </dd>
-          </div>
-
-          {/* Onyomi Examples */}
-          {kanji.onyomi_examples && kanji.onyomi_examples.length > 0 && (
-            <div className="px-4 py-6 sm:px-0">
-              <h3 className="text-3xl font-medium text-gray-500 mb-2">
-                Onyomiga misollar
-              </h3>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
-                        So'z
-                      </th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700 pl-12">
-                        Ma'nosi
-                      </th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
-                        Furigana
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {kanji.onyomi_examples.map((ex, idx) => (
-                      <tr
-                        key={idx}
-                        className="hover:bg-gray-50 transition-colors"
-                      >
-                        <td className="px-4 py-2 text-gray-900 font-semibold">
-                          {ex.word}
-                        </td>
-                        <td className="px-4 py-2 text-gray-700 pl-12">
-                          {ex.meaning}
-                        </td>
-                        <td className="px-4 py-2 text-gray-500">
-                          {ex.furigana}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              {/* 🖼️ SVG rasmlar (o‘ng tomonda) */}
+              {kanji.stroke_order_svgs?.map((url, i) => (
+                <img
+                  key={i}
+                  src={url}
+                  alt={`stroke-${i}`}
+                  className="w-40 h-40 object-contain border border-gray-300 rounded-xl shadow-sm hover:scale-101 transition-transform"
+                />
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Kunyomi Examples */}
-          {kanji.kunyomi_examples && kanji.kunyomi_examples.length > 0 && (
-            <div className="px-4 py-6 sm:px-0">
-              <h3 className="text-3xl font-medium text-gray-500 mb-2">
-                Kunyomiga misollar
-              </h3>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
-                        So'z
-                      </th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700 pl-12">
-                        Ma'nosi
-                      </th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
-                        Furigana
-                      </th>
+        {/* 🈷️ Onyomi */}
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-700">On’yomi</h2>
+          <p className="text-3xl text-[#384B70] mt-2 capitalize">
+            {kanji.onyomi?.join(", ")}
+          </p>
+        </div>
+
+        {/* 🈶 Kunyomi */}
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-700">Kun’yomi</h2>
+          <p className="text-3xl text-[#384B70] mt-2 capitalize">
+            {kanji.kunyomi?.join(", ")}
+          </p>
+        </div>
+
+        {/* 🇯🇵 Tarjima */}
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-700">Tarjimasi</h2>
+          <p className="text-3xl text-[#384B70] mt-2 capitalize">
+            {kanji.tarjima?.join(", ")}
+          </p>
+        </div>
+
+        {/* 📖 Misollar */}
+        {examples.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-700 mb-3">
+              Kanjidan yasalgan so‘zlar
+            </h2>
+            <div className="overflow-x-auto">
+              <table className="min-w-full border border-gray-300 divide-y divide-gray-200 rounded-lg">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                      So‘z
+                    </th>
+                    <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                      Furigana
+                    </th>
+                    <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                      Tarjima
+                    </th>
+                    <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                      Audio
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {examples.map((ex, idx) => (
+                    <tr key={idx} className="hover:bg-gray-50">
+                      <td className="px-4 py-2 font-semibold text-gray-900">
+                        {ex.word}
+                      </td>
+                      <td className="px-4 py-2 text-gray-600">{ex.furigana}</td>
+                      <td className="px-4 py-2 text-gray-600">
+                        {ex.translation}
+                      </td>
+                      <td className="px-4 py-2">
+                        {ex.audio && (
+                          <button
+                            onClick={() => new Audio(ex.audio).play()}
+                            className="bg-[#384B70] text-white w-10 h-10 flex items-center p-1 justify-center rounded-full hover:bg-[#2C3E5D] hover:scale-110 transition-all duration-200"
+                          >
+                            <img src="../../public/play.png" alt="" />
+                          </button>
+                        )}
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {kanji.kunyomi_examples.map((ex, idx) => (
-                      <tr
-                        key={idx}
-                        className="hover:bg-gray-50 transition-colors"
-                      >
-                        <td className="px-4 py-2 text-gray-900 font-semibold">
-                          {ex.word}
-                        </td>
-                        <td className="px-4 py-2 text-gray-700 pl-12">
-                          {ex.meaning}
-                        </td>
-                        <td className="px-4 py-2 text-gray-500">
-                          {ex.furigana}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          )}
-        </dl>
+          </div>
+        )}
       </div>
     </div>
   );

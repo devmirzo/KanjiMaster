@@ -7,3 +7,5 @@ export { default as RegisterPage } from "./RegisterPage";
 export { default as ProfilePage } from "./ProfilePage";
 
 
+// export {default as LevelsPage} from "./LevelsPage"
+// export {default as AboutPage} from "./AboutPage"

@@ -15,13 +15,13 @@ const KanjiCard = ({ kanji, onyomi, kunyomi, gif, id }) => {
                  hover:scale-105 hover:shadow-3xl cursor-pointer
                  border-2 border-[#FCFAEE]/30"
     >
-      {/* {gif && (
-        <img
+      {gif && (
+        <video
           src={gif}
           alt={kanji}
           className="w-20 h-20 object-contain mt-3 z-10"
         />
-      )} */}
+      )}
       <span className="text-4xl md:text-6xl mt-2 font-light">{kanji}</span>
       <span className="text-sm mt-1 opacity-80">
         {/* Onyomi: {onyomi} <br /> */}

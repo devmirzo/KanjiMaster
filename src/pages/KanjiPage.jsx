@@ -50,7 +50,7 @@ const KanjiPage = () => {
             <KanjiCard
               key={k.id}
               id={k.id}
-              kanji={k.kanji}
+              kanji={k.kanji_text}
               onyomi={k.onyomi}
               kunyomi={k.kunyomi}
               gif={k.gif_url}
