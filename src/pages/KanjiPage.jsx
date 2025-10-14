@@ -1,16 +1,35 @@
-import React from "react";
+// src/pages/KanjiPage.jsx
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer"; // 👈 scroll trigger uchun
 import { useKanjis } from "../context/KanjiContext";
 import { Error, KanjiCard, Loading } from "../components";
-
 
 const KanjiPage = () => {
   const { level } = useParams();
   const navigate = useNavigate();
-  const { kanjis, loading, error } = useKanjis();
+  const { getKanjisByLevel, loading, error } = useKanjis();
+  const [kanjisByLevel, setKanjisByLevel] = useState([]);
 
-  // 🔹 Agar kanjis yoki level hali mavjud bo'lmasa
+  // 🔹 Ma'lumot olish
+  useEffect(() => {
+    const fetchKanjis = async () => {
+      try {
+        const data = await getKanjisByLevel(level);
+        const sortedData = data.sort((a, b) => b.id - a.id);
+        setKanjisByLevel(sortedData);
+      } catch (err) {
+        console.error("Kanji olishda xatolik:", err);
+      }
+    };
+    fetchKanjis();
+  }, [level, getKanjisByLevel]);
+
+  // 🔹 Yuklanish holati
   if (loading) return <Loading />;
+
+  // 🔹 Xatolik holati
   if (error)
     return (
       <Error
@@ -19,46 +38,104 @@ const KanjiPage = () => {
       />
     );
 
-  // 🔹 Filtirlashni xavfsiz bajarish (agar level yoki k.level undefined bo'lsa xatolik bermaydi)
-  const filtered = kanjis.filter(
-    (k) => k?.level?.toUpperCase?.() === level?.toUpperCase?.()
-  );
+  // 🔹 Bo‘sh natija holati
+  if (!kanjisByLevel || kanjisByLevel.length === 0)
+    return (
+      <div className="min-h-screen bg-[#FCFAEE] flex flex-col items-center justify-center p-6 text-[#384B70]">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => navigate(-1)}
+          className="mb-6 px-4 py-2 rounded-lg bg-[#384B70] text-[#FCFAEE] font-semibold hover:bg-[#2C3E5D] transition-colors"
+        >
+          ← Orqaga
+        </motion.button>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-xl"
+        >
+          Bu darajada kanjilar mavjud emas.
+        </motion.p>
+      </div>
+    );
 
   return (
-    <div className="min-h-screen bg-[#FCFAEE] p-6">
+    <motion.div
+      className="min-h-screen bg-[#FCFAEE] p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+    >
       {/* 🔹 Orqaga tugma */}
-      <button
+      <motion.button
         onClick={() => navigate(-1)}
         className="mb-4 px-4 py-2 rounded-lg bg-[#384B70] text-[#FCFAEE] font-semibold hover:bg-[#2C3E5D] transition-colors"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
         ← Orqaga
-      </button>
+      </motion.button>
 
       {/* 🔹 Sarlavha */}
-      <h1 className="text-3xl font-bold text-[#384B70] mb-6 text-center">
-        Kanji darajasi: {level?.toUpperCase?.() || "Noma’lum"}
-      </h1>
+      <motion.h1
+        className="text-3xl font-bold text-[#384B70] mb-6 text-center"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        Kanji darajasi: {level?.toUpperCase() || "Noma’lum"}
+      </motion.h1>
 
-      {/* 🔹 Natijani ko‘rsatish */}
-      {filtered.length === 0 ? (
-        <p className="text-center text-lg text-[#384B70]">
-          Bu darajada kanjilar mavjud emas.
-        </p>
-      ) : (
-        <div className="flex flex-wrap items-center justify-center gap-5">
-          {filtered.map((k) => (
+      {/* 🔹 Kanji kartalari */}
+      <div className="flex flex-wrap items-center justify-center gap-5">
+        {kanjisByLevel.map((k) => (
+          <FadeInOnScroll key={k.id}>
             <KanjiCard
-              key={k.id}
               id={k.id}
               kanji={k.kanji_text}
               onyomi={k.onyomi}
               kunyomi={k.kunyomi}
               gif={k.gif_url}
             />
-          ))}
-        </div>
-      )}
-    </div>
+          </FadeInOnScroll>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+
+/* 🔹 Har bir kartani scroll paytida ko‘rsatish uchun komponent */
+const FadeInOnScroll = ({ children }) => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    threshold: 0.2, // 20% ko‘rinishi yetarli
+    triggerOnce: false, // scroll orqaga qaytganda yana yo‘qoladi
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start({
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.6, ease: "easeOut" },
+      });
+    } else {
+      controls.start({ opacity: 0, y: 40 }); // 👈 yo‘qolish animatsiyasi
+    }
+  }, [inView, controls]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 10 }}
+      animate={controls}
+      whileHover={{ scale: 1.01, rotate: 1 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 200, damping: 15 }}
+    >
+      {children}
+    </motion.div>
   );
 };
 

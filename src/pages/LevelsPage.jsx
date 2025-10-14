@@ -1,45 +1,94 @@
-// src/pages/LevelsPage.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useKanjis } from "../context/KanjiContext";
-import { Error, Loading } from "../components";
+import { Error, LevelCard, Loading } from "../components";
+
 const LevelsPage = () => {
   const navigate = useNavigate();
   const { levels, loading, error } = useKanjis();
+
+  // 🔹 Sahifa chiqish animatsiyasi
+  const pageVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
+
+  // 🔹 Har bir level kartasi uchun animatsiya
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.15, duration: 0.4, ease: "easeOut" },
+    }),
+  };
+
+  // 🔹 Bosilganda navigatsiya
+  const handleLevelClick = (level) => navigate(`/kanji/${level}`);
 
   if (loading) return <Loading />;
 
   if (error)
     return (
       <Error
-        message={error.message} // Supabase'dan kelgan xabar
-        onRetry={() => window.location.reload()} // Qayta yuklash tugmasi
+        message={typeof error === "string" ? error : error.message}
+        onRetry={() => window.location.reload()}
       />
     );
 
   return (
-    <div className="min-h-screen bg-[#FCFAEE] flex flex-col items-center justify-center p-6">
-      <h1 className="text-3xl font-bold text-[#384B70] mb-8 text-center">
-        Kanji Level tanlang
-      </h1>
+    <motion.div
+      className="min-h-screen bg-[#FCFAEE] flex flex-col items-center justify-center p-6"
+      variants={pageVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* 🔹 Sarlavha */}
+      <motion.h1
+        className="text-3xl font-bold text-[#384B70] mb-8 text-center"
+        initial={{ y: -40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      >
+        Kanji darajasini tanlang
+      </motion.h1>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
-        {levels.map((lvl) => (
-          <div
-            key={lvl}
-            onClick={() => navigate(`/kanji/${lvl}`)}
-            className="cursor-pointer relative flex items-center justify-center 
-                       w-32 h-32 rounded-3xl shadow-2xl overflow-hidden
-                       bg-gradient-to-tr from-[#384B70] to-[#2C3E5D] 
-                       text-white text-xl font-bold
-                       transform transition-transform duration-300 ease-in-out
-                       hover:scale-105 hover:shadow-3xl"
-          >
-            {lvl}
-          </div>
-        ))}
-      </div>
-    </div>
+      {/* 🔹 Level kartalar */}
+      {levels.length === 0 ? (
+        <motion.p
+          className="text-gray-500 text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          Hech qanday level topilmadi 😕
+        </motion.p>
+      ) : (
+        <motion.div
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6"
+          initial="hidden"
+          animate="visible"
+        >
+          {levels.map((lvl, i) => (
+            <motion.div
+              key={lvl}
+              custom={i}
+              variants={itemVariants}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
+              onClick={() => handleLevelClick(lvl)}
+            >
+              <LevelCard level={lvl} />
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
+    </motion.div>
   );
 };
 

@@ -1,9 +1,9 @@
 // src/pages/LoginPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { auth, googleProvider } from "../firebase";
-import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { useKanjis } from "../context/KanjiContext";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -11,19 +11,16 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ Agar foydalanuvchi allaqachon tizimga kirgan bo‘lsa — asosiy sahifaga yuborish
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) navigate("/");
-    });
-    return () => unsubscribe();
-  }, [navigate]);
+  const { user, authLoading, loginWithEmail, loginWithGoogle } = useKanjis();
 
-  // ✅ Google bilan kirish
+  useEffect(() => {
+    if (!authLoading && user) navigate("/");
+  }, [user, authLoading, navigate]);
+
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      await signInWithPopup(auth, googleProvider);
+      await loginWithGoogle();
       toast.success("Google orqali muvaffaqiyatli kirdingiz! 🎉");
       navigate("/");
     } catch (error) {
@@ -34,42 +31,68 @@ const LoginPage = () => {
     }
   };
 
-  // ✅ Email va parol bilan kirish
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
-      toast.success(`"Tizimga muvaffaqiyatli kirdingiz! 👏"`);
+      await loginWithEmail(email, password);
+      toast.success("Tizimga muvaffaqiyatli kirdingiz! 👏");
       navigate("/");
     } catch (error) {
       console.error(error);
-      if (error.code === "auth/invalid-credential") {
-        toast.error("Email yoki parol noto‘g‘ri!");
-      } else if (error.code === "auth/user-not-found") {
-        toast.error("Bunday foydalanuvchi topilmadi!");
-      } else {
-        toast.error("Kirishda xatolik: " + error.message);
-      }
+      toast.error("Kirishda xatolik: " + error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FCFAEE] to-[#e7e9f3]">
-      <div className="bg-[#FCFAEE] p-10 rounded-3xl shadow-2xl w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center text-[#384B70] mb-6">
-          Kirish
-        </h1>
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FCFAEE]">
+        <p className="text-[#384B70] text-lg font-semibold">
+          ⏳ Yuklanmoqda...
+        </p>
+      </div>
+    );
+  }
 
-        {/* Email va parol formasi */}
-        <form onSubmit={handleLogin} className="space-y-5">
+  return (
+    <motion.div
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FCFAEE] to-[#e7e9f3]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
+      <motion.div
+        className="bg-[#FCFAEE] p-10 rounded-3xl shadow-2xl w-full max-w-md"
+        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <motion.h1
+          className="text-3xl font-bold text-center text-[#384B70] mb-6"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          Kirish
+        </motion.h1>
+
+        <motion.form
+          onSubmit={handleLogin}
+          className="space-y-5"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          {/* Email */}
           <div>
             <label className="block text-[#384B70] font-semibold mb-1">
               Email
             </label>
-            <input
+            <motion.input
+              whileFocus={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 300 }}
               type="email"
               placeholder="example@mail.com"
               value={email}
@@ -79,11 +102,14 @@ const LoginPage = () => {
             />
           </div>
 
+          {/* Parol */}
           <div>
             <label className="block text-[#384B70] font-semibold mb-1">
               Parol
             </label>
-            <input
+            <motion.input
+              whileFocus={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 300 }}
               type="password"
               placeholder="********"
               value={password}
@@ -93,37 +119,60 @@ const LoginPage = () => {
             />
           </div>
 
-          <button
+          {/* Login tugmasi */}
+          <motion.button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-[#384B70] text-[#FCFAEE] font-semibold hover:bg-[#2d3c5c] transition"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 250 }}
+            className={`w-full py-3 rounded-xl font-semibold ${
+              loading
+                ? "bg-[#7b8bb4] text-[#FCFAEE] cursor-not-allowed"
+                : "bg-[#384B70] text-[#FCFAEE] hover:bg-[#2d3c5c]"
+            }`}
           >
             {loading ? "⏳ Kutilmoqda..." : "Kirish"}
-          </button>
-        </form>
+          </motion.button>
+        </motion.form>
 
         {/* Yoki Google orqali */}
-        <div className="flex items-center my-6">
+        <motion.div
+          className="flex items-center my-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
           <div className="flex-grow border-t border-[#384B70]/30"></div>
           <span className="mx-3 text-sm text-[#384B70]/70">yoki</span>
           <div className="flex-grow border-t border-[#384B70]/30"></div>
-        </div>
+        </motion.div>
 
-        <button
+        {/* Google button */}
+        <motion.button
           onClick={handleGoogleLogin}
           disabled={loading}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 250 }}
           className="w-full flex items-center justify-center py-3 rounded-xl border border-[#384B70] text-[#384B70] font-semibold hover:bg-[#384B70] hover:text-[#FCFAEE] transition"
         >
-          <img
+          <motion.img
             src="https://www.svgrepo.com/show/475656/google-color.svg"
             alt="Google"
             className="w-6 h-6 mr-2"
+            whileHover={{ rotate: 10 }}
           />
           Google orqali kirish
-        </button>
+        </motion.button>
 
-        {/* Ro‘yxatdan o‘tishga o‘tish */}
-        <p className="mt-6 text-sm text-center text-[#384B70]/80">
+        {/* Ro‘yxatdan o‘tish linki */}
+        <motion.p
+          className="mt-6 text-sm text-center text-[#384B70]/80"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
           Hisobingiz yo‘qmi?{" "}
           <Link
             to="/register"
@@ -131,9 +180,9 @@ const LoginPage = () => {
           >
             Ro‘yxatdan o‘tish
           </Link>
-        </p>
-      </div>
-    </div>
+        </motion.p>
+      </motion.div>
+    </motion.div>
   );
 };
 

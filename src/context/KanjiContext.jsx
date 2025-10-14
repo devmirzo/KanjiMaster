@@ -1,3 +1,4 @@
+// src/context/KanjiContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { auth, googleProvider } from "../firebase";
@@ -23,81 +24,213 @@ export const KanjiProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  // 🔸 Supabase’dan kanji ma’lumotlarini olish
+  // ============================
+  // 🗄️ IndexedDB funksiyalari
+  // ============================
+  const openDB = () =>
+    new Promise((resolve, reject) => {
+      try {
+        const request = indexedDB.open("KanjiDB", 1);
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains("kanjiDetails")) {
+            db.createObjectStore("kanjiDetails", { keyPath: "id" });
+          }
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = (e) => reject(request.error || e);
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+  const saveToIndexedDB = async (data) => {
+    if (!Array.isArray(data)) return;
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("kanjiDetails", "readwrite");
+      const store = tx.objectStore("kanjiDetails");
+      try {
+        data.forEach((item) => store.put(item));
+      } catch (e) {
+        reject(e);
+      }
+      tx.oncomplete = () => {
+        db.close();
+        resolve(true);
+      };
+      tx.onerror = (e) => {
+        db.close();
+        reject(tx.error || e);
+      };
+    });
+  };
+
+  const getFromIndexedDB = async () => {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("kanjiDetails", "readonly");
+      const store = tx.objectStore("kanjiDetails");
+      const req = store.getAll();
+      req.onsuccess = () => {
+        db.close();
+        resolve(req.result || []);
+      };
+      req.onerror = (e) => {
+        db.close();
+        reject(req.error || e);
+      };
+    });
+  };
+
+  // ============================
+  // 🔸 Kanji ma’lumotlarini olish
+  // ============================
   useEffect(() => {
+    let isMounted = true;
+    let parsed = null;
+
     const fetchKanjis = async () => {
       try {
-        const { data, error } = await supabase.from("kanji").select("*");
-        if (error) throw error;
+        // 1️⃣ LocalStorage’dan tez yuklash
+        const cachedData = localStorage.getItem("kanjis");
+        if (cachedData) {
+          parsed = JSON.parse(cachedData);
+          if (isMounted) {
+            setKanjis(parsed);
+            setLevels([...new Set(parsed.map((k) => k.level).filter(Boolean))]);
+            setLoading(false);
+          }
+        }
 
-        setKanjis(data);
-        const uniqueLevels = [
-          ...new Set(data.map((k) => k.level).filter(Boolean)),
-        ];
-        setLevels(uniqueLevels);
+        // 2️⃣ IndexedDB’dan yuklash
+        const indexedData = await getFromIndexedDB();
+        if (indexedData.length > 0 && parsed && isMounted) {
+          const merged = parsed.map((k) => {
+            const heavy = indexedData.find((d) => d.id === k.id);
+            return heavy ? { ...k, ...heavy } : k;
+          });
+          setKanjis(merged);
+        } else if (indexedData.length > 0 && !parsed && isMounted) {
+          setKanjis(indexedData);
+          setLevels([
+            ...new Set(indexedData.map((k) => k.level).filter(Boolean)),
+          ]);
+        }
+
+        // 3️⃣ Supabase’dan so‘nggi versiyasini olish
+        const { data, error: sbError } = await supabase
+          .from("kanji")
+          .select("*");
+        if (sbError) throw sbError;
+
+        const lightData = data.map(
+          ({ id, kanji_text, onyomi, kunyomi, tarjima, level }) => ({
+            id,
+            kanji_text,
+            onyomi,
+            kunyomi,
+            tarjima,
+            level,
+          })
+        );
+
+        const heavyData = data.map(
+          ({ id, stroke_video, stroke_order_svgs, examples }) => ({
+            id,
+            stroke_video,
+            stroke_order_svgs,
+            examples,
+          })
+        );
+
+        localStorage.setItem("kanjis", JSON.stringify(lightData));
+        await saveToIndexedDB(heavyData);
+
+        if (isMounted) {
+          setKanjis(data);
+          setLevels([...new Set(data.map((k) => k.level).filter(Boolean))]);
+        }
       } catch (err) {
-        setError(err);
+        console.error("❌ Ma’lumot olishda xatolik:", err);
+        if (isMounted) setError(err);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     fetchKanjis();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
+  // ============================
+  // 🔹 Kanji darajasi bo‘yicha filter
+  // ============================
+  const getKanjisByLevel = (level) => {
+    if (!level) return [];
+    return kanjis.filter((k) => k.level?.toLowerCase() === level.toLowerCase());
+  };
+
+  // ============================
   // 🔸 Firebase foydalanuvchi holatini kuzatish
+  // ============================
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      if (currentUser) {
+        setUser(currentUser);
+        sessionStorage.setItem(
+          "user",
+          JSON.stringify({
+            uid: currentUser.uid,
+            name: currentUser.displayName,
+            email: currentUser.email,
+            photo: currentUser.photoURL,
+            provider: currentUser.providerData?.[0]?.providerId,
+          })
+        );
+      } else {
+        setUser(null);
+        sessionStorage.removeItem("user");
+      }
       setAuthLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
-  // 🔸 Login & Register funksiyalari
+  // ============================
+  // 🔸 Auth funksiyalari
+  // ============================
   const registerWithEmail = async (email, password, name) => {
-    try {
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      await updateProfile(auth.currentUser, { displayName: name });
-      setUser(auth.currentUser);
-    } catch (err) {
-      console.error("❌ Ro‘yxatdan o‘tishda xatolik:", err.message);
-      setError(err.message);
-    }
+    const credential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    await updateProfile(auth.currentUser, { displayName: name });
+    setUser(auth.currentUser);
   };
 
   const loginWithEmail = async (email, password) => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      console.error("❌ Login xatosi:", err.message);
-      setError(err.message);
-    }
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
   const loginWithGoogle = async () => {
-    try {
-      await signInWithPopup(auth, googleProvider);
-    } catch (err) {
-      console.error("❌ Google login xatosi:", err.message);
-      setError(err.message);
-    }
+    await signInWithPopup(auth, googleProvider);
   };
 
   const logout = async () => {
-    try {
-      await signOut(auth);
-      setUser(null);
-    } catch (err) {
-      console.error("❌ Chiqishda xatolik:", err.message);
-    }
+    await signOut(auth);
+    setUser(null);
+    sessionStorage.removeItem("user");
   };
 
+  // ============================
+  // 🔸 Context return
+  // ============================
   return (
     <KanjiContext.Provider
       value={{
@@ -106,6 +239,7 @@ export const KanjiProvider = ({ children }) => {
         levels,
         loading,
         error,
+        getKanjisByLevel, // ✅ qo‘shildi
 
         // 🔹 Auth ma’lumotlari
         user,
