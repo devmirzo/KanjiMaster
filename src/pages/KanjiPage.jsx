@@ -12,6 +12,10 @@ const KanjiPage = () => {
   const { getKanjisByLevel, loading, error } = useKanjis();
   const [kanjisByLevel, setKanjisByLevel] = useState([]);
 
+  useEffect(() => {
+    document.title = `Daraja: ${level?.toUpperCase() || "Noma’lum"}`;
+  }, []);
+
   // 🔹 Ma'lumot olish
   useEffect(() => {
     const fetchKanjis = async () => {

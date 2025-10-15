@@ -244,6 +244,7 @@ export const KanjiProvider = ({ children }) => {
         // 🔹 Auth ma’lumotlari
         user,
         authLoading,
+        setUser,
         registerWithEmail,
         loginWithEmail,
         loginWithGoogle,

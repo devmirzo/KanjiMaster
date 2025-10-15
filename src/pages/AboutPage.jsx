@@ -1,11 +1,15 @@
 // src/pages/About.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaTelegramPlane, FaGithub, FaYoutube } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const About = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+        document.title = `Kanji Master`;
+      }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b ">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useKanjis } from "../context/KanjiContext";
@@ -7,6 +7,11 @@ import { Error, LevelCard, Loading } from "../components";
 const LevelsPage = () => {
   const navigate = useNavigate();
   const { levels, loading, error } = useKanjis();
+
+  useEffect(() => {
+    document.title = "Bosh sahifa | KanjiMaster";
+  }, []);
+
 
   // 🔹 Sahifa chiqish animatsiyasi
   const pageVariants = {
@@ -40,7 +45,6 @@ const LevelsPage = () => {
         onRetry={() => window.location.reload()}
       />
     );
-
   return (
     <motion.div
       className="min-h-screen bg-[#FCFAEE] flex flex-col items-center justify-center p-6"

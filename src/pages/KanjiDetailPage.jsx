@@ -1,34 +1,26 @@
-import React, { useEffect, useState } from "react";
+// src/pages/KanjiDetailPage.jsx
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { supabase } from "../supabaseClient";
+import { useKanjis } from "../context/KanjiContext";
 import { Error, Loading, NotFound } from "../components";
 
 const KanjiDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [kanji, setKanji] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { kanjis, loading, error } = useKanjis();
 
+  // ✅ Tanlangan kanjini context'dan topamiz
+  const kanji = kanjis.find((k) => String(k.id) === String(id));
+
+  // 🔹 Title'ni dinamik o‘zgartirish
   useEffect(() => {
-    const fetchKanji = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("kanji")
-          .select("*")
-          .eq("id", id)
-          .single();
-        if (error) throw error;
-        setKanji(data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchKanji();
-  }, [id]);
+    if (kanji?.kanji_text) {
+      document.title = `${kanji.kanji_text} – Kanji tafsilotlari`;
+    } else {
+      document.title = "Kanji tafsilotlari yuklanmoqda...";
+    }
+  }, [kanji]);
 
   if (loading) return <Loading />;
   if (error)
@@ -38,6 +30,7 @@ const KanjiDetailPage = () => {
   if (!kanji)
     return <NotFound message="Kanji topilmadi." onBack={() => navigate(-1)} />;
 
+  // 🔹 Misollarni formatlash
   const examples = Array.isArray(kanji.examples)
     ? kanji.examples
     : JSON.parse(kanji.examples || "[]");
@@ -142,7 +135,7 @@ const KanjiDetailPage = () => {
           </motion.div>
         )}
 
-        {/* 🈷️ Onyomi */}
+        {/* 🈷️ On’yomi */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -152,11 +145,13 @@ const KanjiDetailPage = () => {
             On’yomi
           </h2>
           <p className="text-2xl sm:text-3xl text-[#384B70] mt-2 break-words">
-            {kanji.onyomi?.join(", ")}
+            {Array.isArray(kanji.onyomi)
+              ? kanji.onyomi.join(", ")
+              : kanji.onyomi}
           </p>
         </motion.div>
 
-        {/* 🈶 Kunyomi */}
+        {/* 🈶 Kun’yomi */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -166,7 +161,9 @@ const KanjiDetailPage = () => {
             Kun’yomi
           </h2>
           <p className="text-2xl sm:text-3xl text-[#384B70] mt-2 break-words">
-            {kanji.kunyomi?.join(", ")}
+            {Array.isArray(kanji.kunyomi)
+              ? kanji.kunyomi.join(", ")
+              : kanji.kunyomi}
           </p>
         </motion.div>
 
@@ -180,7 +177,9 @@ const KanjiDetailPage = () => {
             Tarjimasi
           </h2>
           <p className="text-2xl sm:text-3xl text-[#384B70] mt-2 break-words first-letter:uppercase">
-            {kanji.tarjima?.join(", ")}
+            {Array.isArray(kanji.tarjima)
+              ? kanji.tarjima.join(", ")
+              : kanji.tarjima}
           </p>
         </motion.div>
 
@@ -233,7 +232,6 @@ const KanjiDetailPage = () => {
                       <td className="px-2 sm:px-4 py-2">
                         {ex.audio && (
                           <motion.button
-                            whileHover={{ scale: 1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={() => new Audio(ex.audio).play()}
                             className="bg-[#384B70] text-white w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full p-1 hover:bg-[#2C3E5D] transition-all duration-200"

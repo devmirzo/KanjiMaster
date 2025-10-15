@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useKanjis } from "../context/KanjiContext";
@@ -7,6 +7,10 @@ import toast from "react-hot-toast";
 const ProfilePage = () => {
   const { user, logout } = useKanjis();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = `Profile`;
+  }, []);
 
   // 🔹 Logout funksiyasi
   const handleLogout = async () => {

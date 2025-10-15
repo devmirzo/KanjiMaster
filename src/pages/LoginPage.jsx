@@ -14,6 +14,10 @@ const LoginPage = () => {
   const { user, authLoading, loginWithEmail, loginWithGoogle } = useKanjis();
 
   useEffect(() => {
+    document.title = `Login`;
+  }, []);
+
+  useEffect(() => {
     if (!authLoading && user) navigate("/");
   }, [user, authLoading, navigate]);
 

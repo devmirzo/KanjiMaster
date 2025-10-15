@@ -19,6 +19,12 @@ const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+
+   useEffect(() => {
+      document.title = `Register`;
+    }, []);
+
+
   // ✅ Agar foydalanuvchi login bo‘lsa, avtomatik yo‘naltiramiz
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
