@@ -17,7 +17,7 @@ const KanjiPage = () => {
     const fetchKanjis = async () => {
       try {
         const data = await getKanjisByLevel(level);
-        const sortedData = data.sort((a, b) => b.id - a.id);
+        const sortedData = data.sort((a, b) => a.id - b.id);
         setKanjisByLevel(sortedData);
       } catch (err) {
         console.error("Kanji olishda xatolik:", err);
@@ -79,7 +79,7 @@ const KanjiPage = () => {
 
       {/* 🔹 Sarlavha */}
       <motion.h1
-        className="text-3xl font-bold text-[#384B70] mb-6 text-center"
+        className="text-xl sm:text-2xl md:text-3xl font-bold text-[#384B70] mb-6 text-center"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -88,7 +88,7 @@ const KanjiPage = () => {
       </motion.h1>
 
       {/* 🔹 Kanji kartalari */}
-      <div className="flex flex-wrap items-center justify-center gap-5">
+      <div className="flex flex-wrap items-center justify-center gap-3 md:gap-7 sm:gap-3">
         {kanjisByLevel.map((k) => (
           <FadeInOnScroll key={k.id}>
             <KanjiCard

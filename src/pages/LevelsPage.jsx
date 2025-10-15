@@ -69,7 +69,7 @@ const LevelsPage = () => {
         </motion.p>
       ) : (
         <motion.div
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6"
+          className=" flex gap-6 flex-wrap items-center justify-center"
           initial="hidden"
           animate="visible"
         >
@@ -78,7 +78,7 @@ const LevelsPage = () => {
               key={lvl}
               custom={i}
               variants={itemVariants}
-              whileHover={{ scale: 1.08 }}
+              whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 200, damping: 15 }}
               onClick={() => handleLevelClick(lvl)}
