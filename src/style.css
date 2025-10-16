@@ -1,1 +1,22 @@
-@import "tailwindcss";
+@import "tailwindcss"; /* === Global scrollbar dizayni === */
+::-webkit-scrollbar {
+  width: 8px; /* Scroll eni */
+  height: 8px; /* Gorizontal scroll uchun */
+}
+
+::-webkit-scrollbar-track {
+  background: #fcfaee;
+  background: #384b70;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #fcfaee;
+  border-radius: 10px;
+  border: 2px solid #fcfaee;
+  /* border: 2px solid #384b70; */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #2f3d5d; 
+  background-color: #fcfaee; 
+}

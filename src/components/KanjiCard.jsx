@@ -9,7 +9,7 @@ const KanjiCard = ({ id, kanji, onyomi, kunyomi, gif }) => {
       onClick={() => navigate(`/kanji/detail/${id}`)}
       className="
         relative flex flex-col items-center justify-center
-        w-20 h-32 sm:w-24 sm:h-36 md:w-28 md:h-40 lg:w-32 lg:h-44
+        w-24 h-36 sm:w-28 sm:h-40 md:w-32 md:h-44 lg:w-36 lg:h-48
         rounded-xl sm:rounded-2xl md:rounded-3xl  shadow-2xl overflow-hidden
         bg-gradient-to-tr from-[#384B70] to-[#2C3E5D]
         text-white text-center font-bold

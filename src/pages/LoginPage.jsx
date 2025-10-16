@@ -102,7 +102,7 @@ const LoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full p-3 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70] outline-none"
+              className="w-full p-2 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70] outline-none"
             />
           </div>
 
@@ -119,7 +119,7 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-3 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70] outline-none"
+              className="w-full p-2 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70] outline-none"
             />
           </div>
 
@@ -130,7 +130,7 @@ const LoginPage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 250 }}
-            className={`w-full py-3 rounded-xl font-semibold ${
+            className={`w-full py-2 rounded-xl font-semibold ${
               loading
                 ? "bg-[#7b8bb4] text-[#FCFAEE] cursor-not-allowed"
                 : "bg-[#384B70] text-[#FCFAEE] hover:bg-[#2d3c5c]"
@@ -159,7 +159,7 @@ const LoginPage = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ type: "spring", stiffness: 250 }}
-          className="w-full flex items-center justify-center py-3 rounded-xl border border-[#384B70] text-[#384B70] font-semibold hover:bg-[#384B70] hover:text-[#FCFAEE] transition"
+          className="w-full flex items-center justify-center py-2 rounded-xl border border-[#384B70] text-[#384B70] font-semibold hover:bg-[#384B70] hover:text-[#FCFAEE] transition"
         >
           <motion.img
             src="https://www.svgrepo.com/show/475656/google-color.svg"

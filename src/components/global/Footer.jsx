@@ -15,10 +15,10 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
         {/* 🔹 Dastur nomi */}
         <h2
-          className="text-2xl font-bold tracking-wide mb-4 md:mb-0 cursor-pointer"
+          className="text-2xl font-bold tracking-wide mb-4 md:mb-0 cursor-pointer hover:text-[#F5EEC2] transition-colors"
           onClick={() => navigate("/")} // bosilganda asosiy sahifaga o'tadi
         >
-          KanjiMas
+          KanjiMast
         </h2>
 
         {/* 🔹 Ijtimoiy tarmoq ikonkalari */}
@@ -62,10 +62,21 @@ const Footer = () => {
       <div className="border-t border-[#FCFAEE]/20 mt-6 pt-4 text-center text-sm text-[#FCFAEE]/70">
         <p>
           © {new Date().getFullYear()}{" "}
-          <span className="font-semibold">KanjiMas</span>. All rights reserved.
+          <span className="font-semibold">KanjiMast</span>. All rights reserved.
         </p>
         <p className="mt-1">
-          Developed by <span className="font-semibold">Humoyun Mirzo</span>
+          Developed by{" "}
+          <span className="font-semibold">
+            {" "}
+            <a
+              href="https://t.me/DevMirzo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-400 transition-colors duration-200"
+            >
+              Humoyun Mirzo
+            </a>
+          </span>
         </p>
       </div>
     </footer>

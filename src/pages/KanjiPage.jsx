@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, useAnimation } from "framer-motion";
-import { useInView } from "react-intersection-observer"; // 👈 scroll trigger uchun
+import { useInView } from "react-intersection-observer";
 import { useKanjis } from "../context/KanjiContext";
 import { Error, KanjiCard, Loading } from "../components";
 
@@ -14,9 +14,8 @@ const KanjiPage = () => {
 
   useEffect(() => {
     document.title = `Daraja: ${level?.toUpperCase() || "Noma’lum"}`;
-  }, []);
+  }, [level]);
 
-  // 🔹 Ma'lumot olish
   useEffect(() => {
     const fetchKanjis = async () => {
       try {
@@ -30,10 +29,8 @@ const KanjiPage = () => {
     fetchKanjis();
   }, [level, getKanjisByLevel]);
 
-  // 🔹 Yuklanish holati
   if (loading) return <Loading />;
 
-  // 🔹 Xatolik holati
   if (error)
     return (
       <Error
@@ -42,22 +39,21 @@ const KanjiPage = () => {
       />
     );
 
-  // 🔹 Bo‘sh natija holati
   if (!kanjisByLevel || kanjisByLevel.length === 0)
     return (
-      <div className="min-h-screen bg-[#FCFAEE] flex flex-col items-center justify-center p-6 text-[#384B70]">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#FCFAEE] p-6 text-[#384B70]">
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate(-1)}
-          className="mb-6 px-4 py-2 rounded-lg bg-[#384B70] text-[#FCFAEE] font-semibold hover:bg-[#2C3E5D] transition-colors"
+          className="mb-6 rounded-lg bg-[#384B70] px-4 py-2 font-semibold text-[#FCFAEE] transition-colors hover:bg-[#2C3E5D]"
         >
           ← Orqaga
         </motion.button>
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-xl"
+          className="text-center text-xl"
         >
           Bu darajada kanjilar mavjud emas.
         </motion.p>
@@ -66,15 +62,15 @@ const KanjiPage = () => {
 
   return (
     <motion.div
-      className="min-h-screen bg-[#FCFAEE] p-6"
+      className="min-h-screen bg-[#FCFAEE] px-4 py-6 sm:px-6 "
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      {/* 🔹 Orqaga tugma */}
+      {/* 🔙 Orqaga tugma */}
       <motion.button
         onClick={() => navigate(-1)}
-        className="mb-4 px-4 py-2 rounded-lg bg-[#384B70] text-[#FCFAEE] font-semibold hover:bg-[#2C3E5D] transition-colors"
+        className="mb-6 rounded-lg bg-[#384B70] px-4 py-2 font-semibold text-[#FCFAEE] transition-colors hover:bg-[#2C3E5D]"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -83,7 +79,7 @@ const KanjiPage = () => {
 
       {/* 🔹 Sarlavha */}
       <motion.h1
-        className="text-xl sm:text-2xl md:text-3xl font-bold text-[#384B70] mb-6 text-center"
+        className="mb-6 text-center text-xl font-bold text-[#384B70] sm:text-2xl md:text-3xl"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -91,8 +87,8 @@ const KanjiPage = () => {
         Kanji darajasi: {level?.toUpperCase() || "Noma’lum"}
       </motion.h1>
 
-      {/* 🔹 Kanji kartalari */}
-      <div className="flex flex-wrap items-center justify-center gap-3 md:gap-7 sm:gap-3">
+      {/* ✅ Responsiv grid */}
+      <div className="xs:grid-cols-4 grid grid-cols-3 place-items-center gap-2 sm:grid-cols-4 sm:gap-5 md:gap-7 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9">
         {kanjisByLevel.map((k) => (
           <FadeInOnScroll key={k.id}>
             <KanjiCard
@@ -109,12 +105,12 @@ const KanjiPage = () => {
   );
 };
 
-/* 🔹 Har bir kartani scroll paytida ko‘rsatish uchun komponent */
+/* 🔹 Scroll paytida har bir kartani yumshoq chiqarish */
 const FadeInOnScroll = ({ children }) => {
   const controls = useAnimation();
   const [ref, inView] = useInView({
-    threshold: 0.2, // 20% ko‘rinishi yetarli
-    triggerOnce: false, // scroll orqaga qaytganda yana yo‘qoladi
+    threshold: 0.2,
+    triggerOnce: false,
   });
 
   useEffect(() => {
@@ -125,7 +121,7 @@ const FadeInOnScroll = ({ children }) => {
         transition: { duration: 0.6, ease: "easeOut" },
       });
     } else {
-      controls.start({ opacity: 0, y: 40 }); // 👈 yo‘qolish animatsiyasi
+      controls.start({ opacity: 0, y: 40 });
     }
   }, [inView, controls]);
 
@@ -134,9 +130,10 @@ const FadeInOnScroll = ({ children }) => {
       ref={ref}
       initial={{ opacity: 0, y: 10 }}
       animate={controls}
-      whileHover={{ scale: 1.01, rotate: 1 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.97 }}
       transition={{ type: "spring", stiffness: 200, damping: 15 }}
+      className="flex w-full justify-center"
     >
       {children}
     </motion.div>

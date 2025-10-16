@@ -27,7 +27,7 @@ const Navbar = () => {
           onClick={() => navigate("/")}
           className="text-3xl font-bold tracking-wide cursor-pointer hover:text-[#F5EEC2] transition-colors"
         >
-          KanjiMas
+          KanjiMast
         </h1>
 
         {/* ✅ O‘ng tomonda — foydalanuvchi */}

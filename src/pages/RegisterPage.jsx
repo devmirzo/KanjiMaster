@@ -19,11 +19,9 @@ const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-
-   useEffect(() => {
-      document.title = `Register`;
-    }, []);
-
+  useEffect(() => {
+    document.title = `Register`;
+  }, []);
 
   // ✅ Agar foydalanuvchi login bo‘lsa, avtomatik yo‘naltiramiz
   useEffect(() => {
@@ -113,7 +111,7 @@ const RegisterPage = () => {
           transition={{ delay: 0.3 }}
         >
           {/* 🔸 Ism */}
-          <motion.div whileFocus={{ scale: 1.02 }}>
+          <motion.div whileFocus={{ scale: 1.01 }}>
             <label className="block text-[#384B70] font-semibold mb-1">
               Ism
             </label>
@@ -123,7 +121,7 @@ const RegisterPage = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full p-3 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70]"
+              className="w-full p-2 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70]"
             />
           </motion.div>
 
@@ -138,7 +136,7 @@ const RegisterPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full p-3 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70]"
+              className="w-full p-2 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70]"
             />
           </div>
 
@@ -153,7 +151,7 @@ const RegisterPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-3 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70]"
+              className="w-full p-2 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70]"
             />
           </div>
 
@@ -168,7 +166,7 @@ const RegisterPage = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full p-3 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70]"
+              className="w-full p-2 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70]"
             />
           </div>
 
@@ -178,7 +176,7 @@ const RegisterPage = () => {
             disabled={loading}
             whileHover={!loading ? { scale: 1.05 } : {}}
             whileTap={!loading ? { scale: 0.95 } : {}}
-            className={`w-full py-3 rounded-xl font-semibold transition ${
+            className={`w-full py-2 rounded-xl font-semibold transition ${
               loading
                 ? "bg-[#7b8bb4] text-[#FCFAEE] cursor-not-allowed"
                 : "bg-[#384B70] text-[#FCFAEE] hover:bg-[#2d3c5c]"
@@ -206,7 +204,7 @@ const RegisterPage = () => {
           disabled={loading}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="w-full flex items-center justify-center py-3 rounded-xl border border-[#384B70] text-[#384B70] font-semibold hover:bg-[#384B70] hover:text-[#FCFAEE] transition"
+          className="w-full flex items-center justify-center py-2 rounded-xl border border-[#384B70] text-[#384B70] font-semibold hover:bg-[#384B70] hover:text-[#FCFAEE] transition"
         >
           <img
             src="https://www.svgrepo.com/show/475656/google-color.svg"
