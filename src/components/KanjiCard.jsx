@@ -7,40 +7,22 @@ const KanjiCard = ({ id, kanji, onyomi, kunyomi, gif }) => {
   return (
     <div
       onClick={() => navigate(`/kanji/detail/${id}`)}
-      className="
-        relative flex flex-col items-center justify-center
-        w-24 h-36 sm:w-28 sm:h-40 md:w-32 md:h-44 lg:w-36 lg:h-48
-        rounded-xl sm:rounded-2xl md:rounded-3xl  shadow-2xl overflow-hidden
-        bg-gradient-to-tr from-[#384B70] to-[#2C3E5D]
-        text-white text-center font-bold
-        transform transition-all duration-300 ease-in-out
-        hover:scale-105 hover:shadow-[#384B70]/40 hover:shadow-2xl
-        cursor-pointer border border-[#FCFAEE]/20
-      "
+      className="relative flex h-36 w-24 transform cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border border-[#FCFAEE]/20 bg-gradient-to-tr from-[#384B70] to-[#2C3E5D] text-center font-bold text-white shadow-2xl transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-[#384B70]/40 sm:h-40 sm:w-28 sm:rounded-2xl md:h-44 md:w-32 md:rounded-3xl lg:h-48 lg:w-36"
     >
       {/* 🔹 Kanji belgisi */}
-      <span
-        className="
-          text-2xl sm:text-3xl md:text-4xl lg:text-5xl
-          mt-2 font-light drop-shadow-md
-        "
-      >
+      <span className="mt-2 text-3xl font-light drop-shadow-md sm:text-4xl md:text-5xl lg:text-6xl">
         {kanji}
       </span>
 
       {/* 🔹 Onyomi va Kunyomi qisqa ko‘rinish */}
-      <div
-        className="
-          mt-2 text-[10px] sm:text-xs md:text-sm text-[#FCFAEE]/90
-        "
-      >
+      <div className="mt-2 text-[10px] text-[#FCFAEE]/90 sm:text-xs md:text-sm">
         {/* Agar xohlasangiz pastdagini ochishingiz mumkin */}
         {/* <p className="truncate">音: {onyomi || "-"}</p>
         <p className="truncate">訓: {kunyomi || "-"}</p> */}
       </div>
 
       {/* 🔹 Dekorativ animatsiya */}
-      <span className="absolute w-12 h-12 sm:w-16 sm:h-16 bg-white opacity-10 rounded-full animate-ping"></span>
+      <span className="absolute h-12 w-12 animate-ping rounded-full bg-white opacity-10 sm:h-16 sm:w-16"></span>
     </div>
   );
 };
