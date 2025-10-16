@@ -1,7 +1,7 @@
 @import "tailwindcss"; /* === Global scrollbar dizayni === */
 ::-webkit-scrollbar {
-  width: 8px; /* Scroll eni */
-  height: 8px; /* Gorizontal scroll uchun */
+  width: 0px; /* Scroll eni */
+  height: 0px; /* Gorizontal scroll uchun */
 }
 
 ::-webkit-scrollbar-track {
