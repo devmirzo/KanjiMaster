@@ -8,10 +8,11 @@ const LevelsPage = () => {
   const navigate = useNavigate();
   const { levels, loading, error } = useKanjis();
 
+  const level = ["N1", "N2", "N3", "N4", "N5"];
+
   useEffect(() => {
     document.title = "Bosh sahifa | KanjiMaster";
   }, []);
-
 
   // 🔹 Sahifa chiqish animatsiyasi
   const pageVariants = {
@@ -33,7 +34,6 @@ const LevelsPage = () => {
     }),
   };
 
-  // 🔹 Bosilganda navigatsiya
   const handleLevelClick = (level) => navigate(`/kanji/${level}`);
 
   if (loading) return <Loading />;
@@ -45,16 +45,17 @@ const LevelsPage = () => {
         onRetry={() => window.location.reload()}
       />
     );
+
   return (
     <motion.div
-      className="min-h-screen bg-[#FCFAEE] flex flex-col items-center justify-center p-6"
+      className="flex min-h-screen flex-col items-center justify-center bg-[#FCFAEE] px-4 py-12 sm:px-6 md:px-10"
       variants={pageVariants}
       initial="hidden"
       animate="visible"
     >
       {/* 🔹 Sarlavha */}
       <motion.h1
-        className="text-3xl font-bold text-[#384B70] mb-8 text-center"
+        className="mb-10 text-center text-3xl font-bold text-[#384B70] md:text-4xl"
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, ease: "easeOut" }}
@@ -63,35 +64,26 @@ const LevelsPage = () => {
       </motion.h1>
 
       {/* 🔹 Level kartalar */}
-      {levels.length === 0 ? (
-        <motion.p
-          className="text-gray-500 text-lg"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          Hech qanday level topilmadi 😕
-        </motion.p>
-      ) : (
-        <motion.div
-          className=" flex gap-6 flex-wrap items-center justify-center"
-          initial="hidden"
-          animate="visible"
-        >
-          {levels.map((lvl, i) => (
-            <motion.div
-              key={lvl}
-              custom={i}
-              variants={itemVariants}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 200, damping: 15 }}
-              onClick={() => handleLevelClick(lvl)}
-            >
-              <LevelCard level={lvl} />
-            </motion.div>
-          ))}
-        </motion.div>
-      )}
+      <motion.div
+        className="grid w-full max-w-5xl grid-cols-2 justify-items-center gap-x-6 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+        initial="hidden"
+        animate="visible"
+      >
+        {level.map((lvl, i) => (
+          <motion.div
+            key={lvl}
+            custom={i}
+            variants={itemVariants}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+            onClick={() => handleLevelClick(lvl)}
+            className="flex w-[110px] justify-center sm:w-[130px] md:w-[150px]"
+          >
+            <LevelCard level={lvl} />
+          </motion.div>
+        ))}
+      </motion.div>
     </motion.div>
   );
 };

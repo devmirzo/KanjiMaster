@@ -16,6 +16,7 @@ import {
   ProfilePage,
   RegisterPage,
 } from "./pages";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
       { path: "profile", element: <ProfilePage /> },
       { path: "kanji/:level", element: <KanjiPage /> },
       { path: "kanji/detail/:id", element: <KanjiDetailPage /> },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
   { path: "/login", element: <LoginPage /> },

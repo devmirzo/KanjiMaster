@@ -9,10 +9,9 @@ const ProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = `Profile`;
+    document.title = "Profil | KanjiMaster";
   }, []);
 
-  // 🔹 Logout funksiyasi
   const handleLogout = async () => {
     try {
       await logout();
@@ -24,20 +23,18 @@ const ProfilePage = () => {
     }
   };
 
-  // 🔹 Agar foydalanuvchi tizimga kirmagan bo‘lsa
   if (!user) {
     return (
       <motion.div
-        className="flex flex-col items-center justify-center min-h-screen bg-[#FCFAEE] text-[#384B70] px-6 text-center"
+        className="flex min-h-screen flex-col items-center justify-center px-6 text-center text-[#384B70]"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         <motion.h2
-          className="text-2xl sm:text-3xl font-semibold mb-4"
+          className="mb-5 text-2xl font-semibold sm:text-3xl"
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
-          transition={{ duration: 0.5 }}
         >
           Siz hali tizimga kirmagansiz
         </motion.h2>
@@ -46,7 +43,7 @@ const ProfilePage = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate("/login")}
-          className="bg-[#384B70] text-[#FCFAEE] px-6 py-3 rounded-xl text-base sm:text-lg hover:bg-[#2e3c5a] transition"
+          className="rounded-xl bg-[#384B70] px-6 py-3 text-base text-[#FCFAEE] shadow-md transition hover:bg-[#2f3f62] hover:shadow-xl sm:text-lg"
         >
           Kirish sahifasiga o‘tish
         </motion.button>
@@ -54,26 +51,24 @@ const ProfilePage = () => {
     );
   }
 
-  // 🔹 Profil mavjud bo‘lsa
   return (
     <motion.div
-      className="min-h-screen bg-[#FCFAEE] flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8"
+      className="flex min-h-screen items-center justify-center  p-4 sm:p-6 md:p-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
       <motion.div
-        className="bg-white shadow-2xl rounded-3xl max-w-md w-full p-6 sm:p-8 text-center border border-[#384B70]/20"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        whileHover={{ boxShadow: "0px 0px 20px rgba(56, 75, 112, 0.3)" }}
+        className="flex w-full max-w-md flex-col items-center rounded-3xl border border-[#384B70]/20 bg-white/70 p-6 text-center shadow-2xl backdrop-blur-lg sm:max-w-lg sm:p-8"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
       >
-        {/* 🔹 Profil rasmi */}
+        {/* Profil rasmi */}
         <motion.div
-          className="flex justify-center mb-6"
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
+          className="group relative mb-6"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
           <motion.img
@@ -82,14 +77,14 @@ const ProfilePage = () => {
               "https://www.svgrepo.com/show/452030/avatar-default.svg"
             }
             alt={user.displayName || "User"}
-            className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-[#384B70] shadow-md object-cover"
-            whileHover={{ scale: 1.05, rotate: 2 }}
+            className="h-28 w-28 rounded-full border-4 border-[#384B70]/60 object-cover shadow-lg transition-transform duration-300 group-hover:scale-105 sm:h-32 sm:w-32"
           />
+          <div className="absolute inset-0 rounded-full bg-[#384B70]/10 transition duration-300 group-hover:bg-[#384B70]/20"></div>
         </motion.div>
 
-        {/* 🔹 Foydalanuvchi ismi */}
+        {/* Ism */}
         <motion.h2
-          className="text-xl sm:text-2xl font-bold text-[#384B70]"
+          className="text-2xl font-bold text-[#384B70] sm:text-3xl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -97,9 +92,9 @@ const ProfilePage = () => {
           {user.displayName || "Foydalanuvchi"}
         </motion.h2>
 
-        {/* 🔹 Email */}
+        {/* Email */}
         <motion.p
-          className="text-gray-700 mt-2 text-sm sm:text-base break-all"
+          className="mt-2 text-sm break-all text-gray-700 sm:text-base"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
@@ -107,9 +102,9 @@ const ProfilePage = () => {
           {user.email}
         </motion.p>
 
-        {/* 🔹 Hisob turi */}
+        {/* Hisob turi */}
         <motion.p
-          className="text-xs sm:text-sm text-gray-500 mt-1"
+          className="mt-1 text-xs text-gray-500 italic sm:text-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -119,20 +114,23 @@ const ProfilePage = () => {
             : "Qo‘lda ro‘yxatdan o‘tilgan"}
         </motion.p>
 
-        <div className="border-t border-gray-300 my-6"></div>
+        <div className="my-6 w-full border-t border-[#384B70]/20"></div>
 
-        {/* 🔹 Tugmalar */}
+        {/* Tugmalar */}
         <motion.div
-          className="flex flex-col gap-3"
+          className="flex w-full flex-col justify-center gap-3 sm:flex-row"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
           <motion.button
-            whileHover={{ scale: 1.05, backgroundColor: "#2f4164" }}
+            whileHover={{
+              scale: 1.05,
+              backgroundColor: "#2f4164",
+            }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/")}
-            className="bg-[#384B70] text-[#FCFAEE] px-4 py-2 sm:py-3 rounded-lg font-semibold transition text-sm sm:text-base"
+            className="flex-1 rounded-xl bg-[#384B70] px-5 py-3 text-sm font-semibold text-[#FCFAEE] shadow-md transition hover:shadow-lg sm:text-base"
           >
             Asosiy sahifaga qaytish
           </motion.button>
@@ -145,7 +143,7 @@ const ProfilePage = () => {
             }}
             whileTap={{ scale: 0.95 }}
             onClick={handleLogout}
-            className="border-2 border-[#384B70] text-[#384B70] px-4 py-2 sm:py-3 rounded-lg font-semibold transition text-sm sm:text-base"
+            className="flex-1 rounded-xl border-2 border-[#384B70] px-5 py-3 text-sm font-semibold text-[#384B70] shadow-md transition hover:shadow-lg sm:text-base"
           >
             Chiqish
           </motion.button>
