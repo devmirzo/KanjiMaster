@@ -110,7 +110,7 @@ const NotFoundPage = () => {
         }}
         whileTap={{ scale: 0.95 }}
         onClick={() => navigate("/")}
-        className="z-10 mt-1 mb-6 rounded-xl bg-[#384B70] px-6 py-1 font-semibold text-[#FCFAEE] shadow-lg transition"
+        className="z-10 mt-1 mb-6 rounded-xl bg-[#384B70] px-6 py-4 font-semibold text-[#FCFAEE] shadow-lg transition"
       >
         Bosh sahifaga qaytish
       </motion.button>
