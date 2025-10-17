@@ -34,7 +34,7 @@ const LevelsPage = () => {
     }),
   };
 
-  const handleLevelClick = (level) => navigate(`/kanji/${level}`);
+  const onClick = (level) => navigate(`/kanji/${level}`);
 
   if (loading) return <Loading />;
 
@@ -77,7 +77,7 @@ const LevelsPage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            onClick={() => handleLevelClick(lvl)}
+            onClick={() => onClick(lvl)}
             className="flex w-[110px] justify-center sm:w-[130px] md:w-[150px]"
           >
             <LevelCard level={lvl} />

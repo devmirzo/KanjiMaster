@@ -8,7 +8,7 @@ const NotFoundPage = () => {
   const circles = Array.from({ length: 6 });
 
   return (
-    <div className="relative flex min-h-screen flex-col justify-between items-center overflow-hidden bg-[#FCFAEE] text-center text-[#384B70] py-10">
+    <div className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-[#FCFAEE] py-10 text-center text-[#384B70]">
       {/* 🔹 Harakatlanuvchi fon doiralar */}
       {circles.map((_, i) => (
         <motion.div
@@ -39,7 +39,7 @@ const NotFoundPage = () => {
         transition={{ duration: 0.8 }}
         className="z-10 flex flex-col items-center justify-center"
       >
-        <div className="relative mb-1 flex items-center justify-center">
+        <div className="relative mb-0 flex items-center justify-center">
           <motion.div
             animate={{
               y: [0, -6, 0],
@@ -52,7 +52,7 @@ const NotFoundPage = () => {
             }}
             className="relative"
           >
-            <FileCog className="h-40 w-40 text-[#384b70]" />
+            <FileCog className="h-36 w-36 text-[#384b70]" />
             <motion.div
               className="absolute top-1/2 left-1/2"
               style={{ translateX: "-50%", translateY: "-50%" }}
@@ -85,16 +85,16 @@ const NotFoundPage = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mt-1 text-3xl font-semibold sm:text-3xl"
+          className="-mt-8 text-3xl mb-0 font-semibold sm:text-3xl"
         >
-          Sahifa topilmadi 😕
+          Sahifa topilmadi
         </motion.h2>
 
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="mt-1 max-w-md text-sm text-gray-600 sm:text-base"
+          className="mt-0 mb-0 max-w-md text-sm text-gray-600 sm:text-base"
         >
           Ehtimol siz noto‘g‘ri manzilga kirdingiz yoki bu sahifa hali
           <span className="font-medium text-[#2C3E5D]"> tayyor emas</span>.
@@ -110,7 +110,7 @@ const NotFoundPage = () => {
         }}
         whileTap={{ scale: 0.95 }}
         onClick={() => navigate("/")}
-        className="z-10 mt-1 mb-6 rounded-xl bg-[#384B70] px-6 py-4 font-semibold text-[#FCFAEE] shadow-lg transition"
+        className="z-10 -mt-8 mb-24 rounded-xl bg-[#384B70] px-6 py-4 font-semibold text-[#FCFAEE] shadow-lg transition"
       >
         Bosh sahifaga qaytish
       </motion.button>

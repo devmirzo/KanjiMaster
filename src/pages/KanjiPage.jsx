@@ -59,7 +59,7 @@ const KanjiPage = () => {
             style={{ width: "16rem", height: "8rem" }} // kattaroq konteyner
           >
             {/* 📘 Kitob */}
-            <BookOpen className="z-10 h-36 w-36 text-[#384B70] sm:h-40 sm:w-40" />
+            <BookOpen className="z-10 -mt-40 h-36 w-36 text-[#384B70] sm:h-40 sm:w-40" />
 
             {/* 👻 Sharpa kitobning ichidan chiqib yuqoriga uchadi */}
             <motion.div
@@ -75,7 +75,7 @@ const KanjiPage = () => {
                 ease: "easeInOut",
               }}
             >
-              <Ghost className="z-10 h-16 w-16 text-[#384B70]/80 sm:h-20 sm:w-20" />
+              <Ghost className="z-10 -mt-40 h-16 w-16 text-[#384B70]/80 sm:h-20 sm:w-20" />
             </motion.div>
           </motion.div>
 
@@ -90,7 +90,7 @@ const KanjiPage = () => {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-3 text-xl font-semibold text-[#2C3E5D] sm:text-2xl"
+              className="-mt-24 mb-1 text-xl font-semibold text-[#2C3E5D] sm:text-2xl"
             >
               Oops — hozircha bu darajada kanji yo‘q!
             </motion.h3>
@@ -105,16 +105,17 @@ const KanjiPage = () => {
               Kanjilar hozircha{" "}
               <motion.span
                 whileHover={{ scale: 1.05, rotate: [0, 2, -1, 0] }}
-                className="mx-1 inline-block font-medium text-[#2C3E5D]"
+                className="mx-1 mb-0 inline-block font-medium text-[#2C3E5D]"
               >
                 dam olishmoqda
               </motion.span>
-              — ular yangi misollar va GIFlar bilan qaytib keladi. Unhacha siz ham dam oling!
+              — ular yangi misollar va GIFlar bilan qaytib keladi. Ungacha siz
+              ham dam oling!
             </motion.p>
           </motion.p>
 
           {/* ✨ Tugmalar */}
-          <div className="mt-10 flex w-full max-w-xs flex-col items-center gap-4 sm:max-w-sm">
+          <div className="mt-4 flex w-full max-w-xs flex-col items-center gap-4 sm:max-w-sm">
             <motion.button
               whileHover={{
                 scale: 1.03,
