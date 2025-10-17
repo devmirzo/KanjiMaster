@@ -80,7 +80,7 @@ const KanjiPage = () => {
           </motion.div>
 
           {/* 📝 Matn */}
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
@@ -112,7 +112,7 @@ const KanjiPage = () => {
               — ular yangi misollar va GIFlar bilan qaytib keladi. Ungacha siz
               ham dam oling!
             </motion.p>
-          </motion.p>
+          </motion.div>
 
           {/* ✨ Tugmalar */}
           <div className="mt-4 flex w-full max-w-xs flex-col items-center gap-4 sm:max-w-sm">
