@@ -15,11 +15,7 @@ const KanjiCard = ({ id, kanji, onyomi, kunyomi, gif }) => {
       </span>
 
       {/* 🔹 Onyomi va Kunyomi qisqa ko‘rinish */}
-      <div className="mt-2 text-[10px] text-[#FCFAEE]/90 sm:text-xs md:text-sm">
-        {/* Agar xohlasangiz pastdagini ochishingiz mumkin */}
-        {/* <p className="truncate">音: {onyomi || "-"}</p>
-        <p className="truncate">訓: {kunyomi || "-"}</p> */}
-      </div>
+      <div className="mt-2 text-[10px] text-[#FCFAEE]/90 sm:text-xs md:text-sm"></div>
 
       {/* 🔹 Dekorativ animatsiya */}
       <span className="absolute h-12 w-12 animate-ping rounded-full bg-white opacity-10 sm:h-16 sm:w-16"></span>
