@@ -5,7 +5,7 @@ import { FileCog, Search } from "lucide-react";
 
 const NotFoundPage = () => {
   const navigate = useNavigate();
-  const circles = Array.from({ length: 6 });
+  const circles = Array.from({ length: 30 });
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-[#FCFAEE] py-10 text-center text-[#384B70]">
