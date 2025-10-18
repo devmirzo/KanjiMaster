@@ -52,8 +52,8 @@ const LoginPage = () => {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FCFAEE]">
-        <p className="text-[#384B70] text-lg font-semibold">
+      <div className="flex min-h-screen items-center justify-center bg-[#FCFAEE]">
+        <p className="text-lg font-semibold text-[#384B70]">
           ⏳ Yuklanmoqda...
         </p>
       </div>
@@ -62,22 +62,22 @@ const LoginPage = () => {
 
   return (
     <motion.div
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FCFAEE] to-[#e7e9f3]"
+      className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#FCFAEE] to-[#e7e9f3]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
     >
       <motion.div
-        className="bg-[#FCFAEE] p-10 rounded-3xl shadow-2xl w-full max-w-md"
+        className="w-full max-w-md rounded-3xl bg-[#FCFAEE] p-10 shadow-2xl"
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <motion.h1
-          className="text-3xl font-bold text-center text-[#384B70] mb-6"
+          className="mb-6 text-center text-3xl font-bold text-[#384B70]"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.7 }}
         >
           Kirish
         </motion.h1>
@@ -87,11 +87,11 @@ const LoginPage = () => {
           className="space-y-5"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.5 }}
         >
           {/* Email */}
           <div>
-            <label className="block text-[#384B70] font-semibold mb-1">
+            <label className="mb-1 block font-semibold text-[#384B70]">
               Email
             </label>
             <motion.input
@@ -102,13 +102,13 @@ const LoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full p-2 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70] outline-none"
+              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
             />
           </div>
 
           {/* Parol */}
           <div>
-            <label className="block text-[#384B70] font-semibold mb-1">
+            <label className="mb-1 block font-semibold text-[#384B70]">
               Parol
             </label>
             <motion.input
@@ -119,7 +119,7 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-2 border border-[#384B70]/30 rounded-xl focus:ring-2 focus:ring-[#384B70] outline-none"
+              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
             />
           </div>
 
@@ -130,9 +130,9 @@ const LoginPage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 250 }}
-            className={`w-full py-2 rounded-xl font-semibold ${
+            className={`w-full rounded-xl py-2 font-semibold ${
               loading
-                ? "bg-[#7b8bb4] text-[#FCFAEE] cursor-not-allowed"
+                ? "cursor-not-allowed bg-[#7b8bb4] text-[#FCFAEE]"
                 : "bg-[#384B70] text-[#FCFAEE] hover:bg-[#2d3c5c]"
             }`}
           >
@@ -142,7 +142,7 @@ const LoginPage = () => {
 
         {/* Yoki Google orqali */}
         <motion.div
-          className="flex items-center my-6"
+          className="my-3 flex items-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
@@ -159,12 +159,12 @@ const LoginPage = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ type: "spring", stiffness: 250 }}
-          className="w-full flex items-center justify-center py-2 rounded-xl border border-[#384B70] text-[#384B70] font-semibold hover:bg-[#384B70] hover:text-[#FCFAEE] transition"
+          className="flex w-full items-center justify-center rounded-xl border border-[#384B70] py-2 font-semibold text-[#384B70] transition hover:bg-[#384B70] hover:text-[#FCFAEE]"
         >
           <motion.img
             src="https://www.svgrepo.com/show/475656/google-color.svg"
             alt="Google"
-            className="w-6 h-6 mr-2"
+            className="mr-2 h-6 w-6"
             whileHover={{ rotate: 10 }}
           />
           Google orqali kirish
@@ -172,7 +172,7 @@ const LoginPage = () => {
 
         {/* Ro‘yxatdan o‘tish linki */}
         <motion.p
-          className="mt-6 text-sm text-center text-[#384B70]/80"
+          className="mt-6 text-center text-sm text-[#384B70]/80"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -180,7 +180,7 @@ const LoginPage = () => {
           Hisobingiz yo‘qmi?{" "}
           <Link
             to="/register"
-            className="text-[#384B70] font-semibold underline hover:text-[#2d3c5c]"
+            className="font-semibold text-[#384B70] underline hover:text-[#2d3c5c]"
           >
             Ro‘yxatdan o‘tish
           </Link>

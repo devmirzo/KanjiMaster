@@ -163,10 +163,10 @@ const LevelsPage = () => {
 
             {/* Static text message */}
             <p className="mt-8 text-2xl font-medium text-[#384B70]">
-              Bu kanji hali bizning galaktikamizda yo‘q 
+              Bu kanji hali bizning galaktikamizda yo‘q
             </p>
             <span className="text-md text-[#6b7b9b]">
-              Boshqa belgini qidirib ko‘ring — siz haqiqiy kanji izlovchisiz 
+              Boshqa belgini qidirib ko‘ring — siz haqiqiy kanji izlovchisiz
             </span>
           </div>
         )

@@ -1,9 +1,7 @@
 // src/App.jsx
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import RootLayouts from "./layouts/RootLayouts";
-
 import { KanjiProvider } from "./context/KanjiContext";
 import { ProtectedRoute } from "./components";
 
@@ -42,19 +40,21 @@ const router = createBrowserRouter([
 function App() {
   return (
     <KanjiProvider>
-      <RouterProvider router={router} />
+      {/* 🔥 Global toaster joylashtirildi */}
       <Toaster
-        position="right"
+        position="bottom-right"
         toastOptions={{
-          duration: 300,
+          duration: 3000,
           style: {
             background: "#384B70",
             color: "#FCFAEE",
             borderRadius: "10px",
-            fontFamily: "Square721 BT",
+            padding: "12px 16px",
+            fontSize: "15px",
           },
         }}
       />
+      <RouterProvider router={router} />
     </KanjiProvider>
   );
 }
