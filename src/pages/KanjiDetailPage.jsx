@@ -2,24 +2,39 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Heart,
+  HeartOff,
+  BookOpenCheck,
+  BookOpen,
+} from "lucide-react";
 import { useKanjis } from "../context/KanjiContext";
-import { Error, Loading, NotFound } from "../components";
+import { Error, Loading,  } from "../components";
 
 const KanjiDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { kanjis, loading, error } = useKanjis();
+  const {
+    kanjis,
+    loading,
+    error,
+    favorites,
+    learned,
+    toggleFavorite,
+    toggleLearned,
+  } = useKanjis();
 
-  // ✅ Tanlangan kanjini context'dan topamiz
   const kanji = kanjis.find((k) => String(k.id) === String(id));
+  const currentIndex = kanjis.findIndex((k) => String(k.id) === String(id));
+  const prevKanji = kanjis[currentIndex - 1];
+  const nextKanji = kanjis[currentIndex + 1];
 
-  // 🔹 Title'ni dinamik o‘zgartirish
   useEffect(() => {
-    if (kanji?.kanji_text) {
-      document.title = `${kanji.kanji_text} – Kanji tafsilotlari`;
-    } else {
-      document.title = "Kanji tafsilotlari yuklanmoqda...";
-    }
+    document.title = kanji?.kanji_text
+      ? `${kanji.kanji_text} – Kanji tafsilotlari`
+      : "Kanji tafsilotlari yuklanmoqda...";
   }, [kanji]);
 
   if (loading) return <Loading />;
@@ -30,7 +45,8 @@ const KanjiDetailPage = () => {
   if (!kanji)
     return <NotFound message="Kanji topilmadi." onBack={() => navigate(-1)} />;
 
-  // 🔹 Misollarni formatlash
+  const isFavorite = favorites.includes(kanji.id);
+  const isLearned = learned.includes(kanji.id);
   const examples = Array.isArray(kanji.examples)
     ? kanji.examples
     : JSON.parse(kanji.examples || "[]");
@@ -46,7 +62,7 @@ const KanjiDetailPage = () => {
 
   return (
     <motion.div
-      className="min-h-screen bg-[#FCFAEE] p-4 sm:p-6 lg:p-10"
+      className="min-h-screen  p-6 text-[#384B70] sm:p-8 lg:p-12"
       variants={pageVariants}
       initial="hidden"
       animate="visible"
@@ -57,201 +73,182 @@ const KanjiDetailPage = () => {
         onClick={() => navigate(-1)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 200 }}
-        className="mb-6 px-4 py-2 bg-[#384B70] text-[#FCFAEE] rounded-lg 
-                   hover:bg-[#2C3E5D] transition-colors text-sm sm:text-base"
+        className="mb-6 flex items-center gap-2 rounded-lg text-[#384B70] px-5 py-2 font-medium bg-[#FCFAEE] shadow-md transition hover:text-[#2f3d5c]"
       >
-        ← Orqaga
+        <ArrowLeft className="h-5 w-5" />
+        Orqaga
       </motion.button>
 
-      {/* 🔹 Kanji sarlavha */}
-      <motion.div
-        className="text-center mb-8"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
-        <motion.h1
-          className="text-[6rem] sm:text-[8rem] lg:text-[10rem] font-light text-[#384B70] leading-none"
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7 }}
-        >
+      {/* 🔹 Kanji belgisi */}
+      <motion.div className="mb-10 text-center">
+        <motion.h1 className="text-[7rem] leading-none font-light drop-shadow-md sm:text-[9rem] lg:text-[11rem]">
           {kanji.kanji_text}
         </motion.h1>
-        <motion.p
-          className="text-xl sm:text-2xl text-gray-600"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          Daraja: {kanji.level}
-        </motion.p>
       </motion.div>
 
-      {/* 🔹 Asosiy konteyner */}
-      <motion.div
-        className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 space-y-6 
-                   max-w-5xl mx-auto"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-      >
-        {/* 🎥 Yozilish tartibi */}
-        {(kanji.stroke_video || kanji.stroke_order_svgs?.length > 0) && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+      {/* 🔹 Daraja va holatlar */}
+      <div className="mb-10 flex flex-col items-center gap-3">
+        <motion.button
+          onClick={() => navigate(`/kanji/${kanji.level}`)}
+          whileHover={{ scale: 1.05 }}
+          className="inline-flex items-center gap-2 rounded-full border border-[#384B70] bg-[#FCFAEE] px-6 py-1 text-lg font-medium text-[#384B70] transition hover:bg-[#eae7d8]"
+        >
+          <span className="h-2 w-2 animate-pulse rounded-full bg-[#384B70]" />
+          {kanji.level} daraja
+        </motion.button>
+
+        <div className="mt-3 flex">
+          {/* ❤️ Sevimli */}
+          <motion.button
+            onClick={() => toggleFavorite(kanji.id)}
+            whileHover={{ scale: 1.02 }}
+            className={`flex items-center justify-center rounded-l-full border border-[#384B70] px-7 py-2 transition-all ${
+              isFavorite
+                ? "bg-[#384B70] text-[#FCFAEE]"
+                : "bg-[#FCFAEE] text-[#384B70] hover:bg-[#eae7d8]"
+            }`}
           >
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-700 mb-3 text-center">
-              Yozilish tartibi
-            </h2>
-            <div className="flex flex-wrap gap-3 sm:gap-4 justify-center items-center">
+            {isFavorite ? <HeartOff size={20} /> : <Heart size={20} />}
+          </motion.button>
+
+          {/* 📗 O‘rganilgan */}
+          <motion.button
+            onClick={() => toggleLearned(kanji.id)}
+            whileHover={{ scale: 1.02 }}
+            className={`flex items-center justify-center rounded-r-full border border-[#384B70] px-7 py-2 transition-all ${
+              isLearned
+                ? "bg-[#384B70] text-[#FCFAEE]"
+                : "bg-[#FCFAEE] text-[#384B70] hover:bg-[#eae7d8]"
+            }`}
+          >
+            {isLearned ? <BookOpenCheck size={20} /> : <BookOpen size={20} />}
+          </motion.button>
+        </div>
+      </div>
+
+      {/* 🔹 Asosiy konteyner */}
+      <motion.div className="mx-auto max-w-5xl space-y-6 rounded-2xl border border-[#384B70]/40 bg-white p-6 shadow-lg">
+        {/* ✍️ Yozilish tartibi */}
+        {(kanji.stroke_video || kanji.stroke_order_svgs?.length > 0) && (
+          <div className="text-center">
+            <h2 className="mb-3 text-xl font-semibold">Yozilish tartibi</h2>
+            <div className="flex flex-wrap justify-center gap-3">
               {kanji.stroke_video && (
-                <motion.video
+                <video
                   src={kanji.stroke_video}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  className="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-xl shadow-sm border border-gray-300"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 200 }}
+                  className="h-20 w-20 rounded-xl border border-[#384B70]/30 object-contain shadow-sm"
                 />
               )}
-
               {kanji.stroke_order_svgs?.map((url, i) => (
-                <motion.img
+                <img
                   key={i}
                   src={url}
                   alt={`stroke-${i}`}
-                  className="w-16 h-16 sm:w-20 sm:h-20 object-contain border border-gray-300 rounded-xl shadow-sm"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 200 }}
+                  className="h-20 w-20 rounded-xl border border-[#384B70]/30 object-contain shadow-sm"
                 />
               ))}
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* 🈷️ On’yomi */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <h2 className="text-xl sm:text-2xl font-semibold text-gray-700">
-            On’yomi
-          </h2>
-          <p className="text-2xl sm:text-3xl text-[#384B70] mt-2 break-words">
-            {Array.isArray(kanji.onyomi)
-              ? kanji.onyomi.join(", ")
-              : kanji.onyomi}
-          </p>
-        </motion.div>
+        <div>
+          <h2 className="text-xl font-semibold">On’yomi</h2>
+          <p className="mt-2 text-2xl break-words">{kanji.onyomi}</p>
+        </div>
 
         {/* 🈶 Kun’yomi */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <h2 className="text-xl sm:text-2xl font-semibold text-gray-700">
-            Kun’yomi
-          </h2>
-          <p className="text-2xl sm:text-3xl text-[#384B70] mt-2 break-words">
-            {Array.isArray(kanji.kunyomi)
-              ? kanji.kunyomi.join(", ")
-              : kanji.kunyomi}
-          </p>
-        </motion.div>
+        <div>
+          <h2 className="text-xl font-semibold">Kun’yomi</h2>
+          <p className="mt-2 text-2xl break-words">{kanji.kunyomi}</p>
+        </div>
 
         {/* 🇯🇵 Tarjima */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <h2 className="text-xl sm:text-2xl font-semibold text-gray-700">
-            Tarjimasi
-          </h2>
-          <p className="text-2xl sm:text-3xl text-[#384B70] mt-2 break-words first-letter:uppercase">
+        <div>
+          <h2 className="text-xl font-semibold">Tarjimasi</h2>
+          <p className="mt-2 text-2xl first-letter:uppercase">
             {Array.isArray(kanji.tarjima)
               ? kanji.tarjima.join(", ")
               : kanji.tarjima}
           </p>
-        </motion.div>
+        </div>
 
-        {/* 📖 Misollar jadvali */}
+        {/* 📖 Misollar */}
         {examples.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-700 mb-3">
+          <div>
+            <h2 className="mb-3 text-xl font-semibold">
               Kanjidan yasalgan so‘zlar
             </h2>
-            <div className="overflow-x-auto">
-              <motion.table
-                className="min-w-full border border-gray-300 divide-y divide-gray-200 rounded-lg text-sm sm:text-base"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.7 }}
-              >
-                <thead className="bg-gray-300">
+            <div className="overflow-x-auto rounded-lg border border-[#384B70]/40">
+              <table className="min-w-full divide-y divide-[#384B70]/30 text-sm sm:text-base">
+                <thead className="bg-[#eae7d8]">
                   <tr>
-                    {["So‘z", "Furigana", "Tarjima", "Audio"].map((h, idx) => (
-                      <th
-                        key={idx}
-                        className="px-2 sm:px-4 py-2 text-left font-semibold text-gray-700"
-                      >
+                    {["So‘z", "Furigana", "Tarjima", "Audio"].map((h, i) => (
+                      <th key={i} className="px-4 py-2 text-left font-semibold">
                         {h}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-300">
-                  {examples.map((ex, idx) => (
-                    <motion.tr
-                      key={idx}
-                      className="hover:bg-gray-100"
-                      whileHover={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      <td className="px-2 sm:px-4 py-2 text-lg font-semibold text-gray-900 whitespace-nowrap">
+                <tbody>
+                  {examples.map((ex, i) => (
+                    <tr key={i} className="transition hover:bg-[#384B70]/10">
+                      <td className="px-4 py-2 text-lg font-semibold">
                         {ex.word}
                       </td>
-                      <td className="px-2 sm:px-4 py-2 text-gray-600">
-                        {ex.furigana}
-                      </td>
-                      <td className="px-2 sm:px-4 py-2 text-gray-600 first-letter:uppercase">
+                      <td className="px-4 py-2">{ex.furigana}</td>
+                      <td className="px-4 py-2 first-letter:uppercase">
                         {ex.translation}
                       </td>
-                      <td className="px-2 sm:px-4 py-2">
+                      <td className="px-4 py-2">
                         {ex.audio && (
-                          <motion.button
-                            whileTap={{ scale: 0.9 }}
+                          <button
                             onClick={() => new Audio(ex.audio).play()}
-                            className="bg-[#384B70] text-white w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full p-1 hover:bg-[#2C3E5D] transition-all duration-200"
+                            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#384B70] text-[#FCFAEE] hover:bg-[#2f3d5c]"
                           >
-                            <img
-                              src="../../play.png"
-                              alt="play"
-                              className="w-4 sm:w-5"
-                            />
-                          </motion.button>
+                            <img src="../../play.png" alt="play" />
+                          </button>
                         )}
                       </td>
-                    </motion.tr>
+                    </tr>
                   ))}
                 </tbody>
-              </motion.table>
+              </table>
             </div>
-          </motion.div>
+          </div>
         )}
       </motion.div>
+
+      {/* ⬅️➡️ Navigatsiya */}
+      <div className="mx-auto mt-10 flex max-w-5xl justify-between">
+        {prevKanji ? (
+          <motion.button
+            onClick={() => navigate(`/kanji/detail/${prevKanji.id}`)}
+            whileHover={{ scale: 1.05 }}
+            className="flex items-center gap-2 rounded-lg text-[#384B70] px-5 py-2 bg-[#FCFAEE] shadow-md transition hover:text-[#2f3d5c]"
+          >
+            <ArrowLeft size={18} /> Oldingi
+          </motion.button>
+        ) : (
+          <div />
+        )}
+
+        {nextKanji ? (
+          <motion.button
+            onClick={() => navigate(`/kanji/detail/${nextKanji.id}`)}
+            whileHover={{ scale: 1.05 }}
+            className="flex items-center gap-2 rounded-lg text-[#384B70] px-5 py-2 bg-[#FCFAEE] shadow-md transition hover:text-[#2f3d5c]"
+          >
+            Keyingi <ArrowRight size={18} />
+          </motion.button>
+        ) : (
+          <div />
+        )}
+      </div>
     </motion.div>
   );
 };

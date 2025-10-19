@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useKanjis } from "../../context/KanjiContext";
+import { Menu, X, LogOut, User, Heart, BookOpen } from "lucide-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user, logout } = useKanjis();
+  const { user, logout } = useKanjis(); // endi darkMode kerak emas
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // 🔹 Tashqariga bosilganda menyuni yopish
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
       }
     };
@@ -20,79 +22,165 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-[#384B70] text-[#FCFAEE] sticky top-0 z-50 shadow-lg">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* ✅ Chap tomonda — dastur nomi */}
+    <nav className="sticky top-0 z-50 border-b border-[#384B70]/20 bg-[#FCFAEE] text-[#384B70] shadow-md transition-all duration-300">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        {/* 🔹 Logo */}
         <h1
           onClick={() => navigate("/")}
-          className="text-3xl font-bold tracking-wide cursor-pointer hover:text-[#F5EEC2] transition-colors"
+          className="cursor-pointer text-3xl font-bold tracking-wide text-[#384B70] transition-transform duration-300 hover:scale-105 hover:text-[#2E3E5E]"
         >
           KanjiMast
         </h1>
 
-        {/* ✅ O‘ng tomonda — foydalanuvchi */}
-        {user ? (
-          <div
-            className="flex items-center space-x-3 relative"
-            ref={dropdownRef}
+        {/* 🔹 O‘ng tomondagi menyu */}
+        <div className="flex items-center gap-4 md:gap-6">
+          {/* 🌙 Mobil menyu tugmasi */}
+          <button
+            onClick={() => setMenuOpen((prev) => !prev)}
+            aria-label="Toggle menu"
+            className="text-[#384B70] transition-transform duration-300 hover:scale-110 hover:text-[#2E3E5E] md:hidden"
           >
-            <span className="hidden md:inline font-medium text-lg">
-              {user.displayName || "Foydalanuvchi"}
-            </span>
+            {menuOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
 
-            {/* Profil rasmi */}
-            <img
-              src={
-                user.photoURL ||
-                "https://www.svgrepo.com/show/452030/avatar-default.svg"
-              }
-              alt={user.displayName || "User"}
-              className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-[#FCFAEE] cursor-pointer hover:scale-105 transition-transform duration-200"
-              onClick={() => setDropdownOpen((prev) => !prev)}
-            />
+          {/* 👤 Foydalanuvchi mavjud bo‘lsa */}
+          {user ? (
+            <div
+              ref={dropdownRef}
+              className="relative flex items-center space-x-3"
+            >
+              <img
+                src={
+                  user.photoURL ||
+                  "https://www.svgrepo.com/show/452030/avatar-default.svg"
+                }
+                alt={user.displayName || "User"}
+                onClick={() => setDropdownOpen((prev) => !prev)}
+                className="h-10 w-10 cursor-pointer rounded-full border-2 border-[#384B70] shadow-[0_0_10px_rgba(56,75,112,0.3)] transition-transform duration-300 hover:scale-105 md:h-12 md:w-12"
+              />
 
-            {/* 🔽 Dropdown menyu */}
-            {dropdownOpen && (
-              <div className="absolute right-0 top-14 bg-[#FCFAEE] text-[#384B70] rounded-xl shadow-lg py-2 w-40 animate-fade-in">
-                <button
-                  onClick={() => {
-                    navigate("/profile");
-                    setDropdownOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 hover:bg-[#E6E4D8] transition rounded-t-xl"
-                >
-                  Profil
-                </button>
-                <button
-                  onClick={() => {
-                    logout();
-                    setDropdownOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 hover:bg-[#E6E4D8] transition rounded-b-xl"
-                >
-                  Chiqish
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
-          // 🔹 Agar user yo‘q bo‘lsa
-          <div className="flex gap-3">
-            <button
-              onClick={() => navigate("/login")}
-              className="bg-[#FCFAEE] text-[#384B70] px-4 py-2 rounded-lg font-semibold hover:bg-[#E6E4D8] transition"
-            >
-              Kirish
-            </button>
-            <button
-              onClick={() => navigate("/register")}
-              className="border-2 border-[#FCFAEE] text-[#FCFAEE] px-4 py-2 rounded-lg font-semibold hover:bg-[#FCFAEE] hover:text-[#384B70] transition"
-            >
-              Ro‘yxatdan o‘tish
-            </button>
-          </div>
-        )}
+              {dropdownOpen && (
+                <div className="absolute top-20 right-0 w-56 overflow-hidden rounded-xl border border-[#384B70]/20 bg-[#FCFAEE] text-[#384B70] shadow-md transition-all duration-300">
+                  {/* Header */}
+                  <div className="flex items-center justify-between border-b border-[#384B70]/20 px-4 py-2">
+                    <span className="text-sm font-semibold">
+                      {user.displayName || "Foydalanuvchi"}
+                    </span>
+                  </div>
+
+                  {/* Menyu elementlari */}
+                  {[
+                    {
+                      label: "Profil",
+                      icon: <User size={18} />,
+                      path: "/profile",
+                    },
+                    {
+                      label: "O‘rganilgan",
+                      icon: <BookOpen size={18} />,
+                      path: "/learned",
+                    },
+                    {
+                      label: "Sevimli",
+                      icon: <Heart size={18} />,
+                      path: "/favorites",
+                    },
+                  ].map((item) => (
+                    <button
+                      key={item.label}
+                      onClick={() => {
+                        navigate(item.path);
+                        setDropdownOpen(false);
+                      }}
+                      className="flex w-full items-center gap-2 px-4 py-2 text-left transition-all duration-200 hover:bg-[#384B70] hover:text-[#FCFAEE]"
+                    >
+                      {item.icon} {item.label}
+                    </button>
+                  ))}
+
+                  {/* Chiqish */}
+                  <button
+                    onClick={() => {
+                      logout();
+                      setDropdownOpen(false);
+                    }}
+                    className="flex w-full items-center gap-2 rounded-b-xl px-4 py-2 text-left font-semibold text-[#E63946] transition-all duration-200 hover:bg-[#384B70]/10"
+                  >
+                    <LogOut size={18} /> Chiqish
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            // 🔹 Foydalanuvchi yo‘q bo‘lsa
+            <div className="hidden gap-3 md:flex">
+              <button
+                onClick={() => navigate("/login")}
+                className="rounded-lg border border-[#384B70]/30 bg-[#FCFAEE] px-4 py-2 font-semibold text-[#384B70]/80 transition-all duration-200 hover:bg-[#384B70] hover:text-[#FCFAEE]"
+              >
+                Kirish
+              </button>
+              <button
+                onClick={() => navigate("/register")}
+                className="rounded-lg border-2 border-[#384B70] bg-transparent px-4 py-2 font-semibold text-[#384B70] transition-all duration-200 hover:bg-[#384B70] hover:text-[#FCFAEE]"
+              >
+                Ro‘yxatdan o‘tish
+              </button>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* 📱 Mobil menyu */}
+      {menuOpen && (
+        <div className="flex flex-col items-center space-y-3 border-t border-[#384B70]/20 bg-[#FCFAEE] py-4 text-[#384B70] shadow-inner transition-all duration-300 md:hidden">
+          {user ? (
+            <>
+              {[
+                { label: "Profil", path: "/profile" },
+                { label: "Sevimli", path: "/favorites" },
+                { label: "O‘rganilgan", path: "/learned" },
+              ].map((item) => (
+                <button
+                  key={item.label}
+                  onClick={() => {
+                    navigate(item.path);
+                    setMenuOpen(false);
+                  }}
+                  className="font-medium transition-colors duration-200 hover:text-[#2E3E5E] hover:underline"
+                >
+                  {item.label}
+                </button>
+              ))}
+
+              <button
+                onClick={() => {
+                  logout();
+                  setMenuOpen(false);
+                }}
+                className="font-semibold text-[#E63946] transition-all duration-200 hover:underline"
+              >
+                Chiqish
+              </button>
+            </>
+          ) : (
+            <>
+              {["Kirish", "Ro‘yxatdan o‘tish"].map((label, i) => (
+                <button
+                  key={label}
+                  onClick={() => {
+                    navigate(i === 0 ? "/login" : "/register");
+                    setMenuOpen(false);
+                  }}
+                  className="font-medium transition-colors duration-200 hover:text-[#2E3E5E] hover:underline"
+                >
+                  {label}
+                </button>
+              ))}
+            </>
+          )}
+        </div>
+      )}
     </nav>
   );
 };

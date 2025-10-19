@@ -5,7 +5,7 @@ const loadingKanjis = ["百", "千", "万", "円", "年", "上", "下", "中"];
 const Loading = () => {
   const [index, setIndex] = React.useState(0);
 
-  // Har 300msda yangi kanji ko'rsatiladi
+  // Har 300ms da yangi kanji ko'rsatiladi
   React.useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % loadingKanjis.length);
@@ -14,27 +14,58 @@ const Loading = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#FCFAEE]">
-      <div className="text-[#384B70] text-9xl animate-bounce mb-6">
+    <div
+      className="flex min-h-screen flex-col items-center justify-center transition-all duration-500"
+      style={{ backgroundColor: "#FCFAEE", color: "#384B70" }}
+    >
+      {/* 🔹 Kanji belgisi */}
+      <div
+        className="mb-6 animate-bounce text-9xl font-medium drop-shadow-[0_4px_10px_rgba(56,75,112,0.5)] transition-all duration-500"
+        style={{ color: "#384B70" }}
+      >
         {loadingKanjis[index]}
       </div>
-      <p className="text-[#384B70] text-2xl font-semibold animate-pulse">
+
+      {/* 🔹 Matn */}
+      <p
+        className="animate-pulse text-2xl font-semibold"
+        style={{ color: "#384B70" }}
+      >
         Kanji yuklanmoqda...
       </p>
-      <div className="mt-6 w-40 h-1 bg-gray-300 rounded-full overflow-hidden">
-        <div className="h-full bg-[#384B70] animate-loading"></div>
+
+      {/* 🔹 Progress chiziq */}
+      <div
+        className="relative mt-8 h-2 w-52 overflow-hidden rounded-full shadow-inner"
+        style={{ backgroundColor: "#e0e0d8" }}
+      >
+        <div
+          className="animate-loading absolute top-0 left-0 h-full w-1/2"
+          style={{ backgroundColor: "#384B70" }}
+        ></div>
       </div>
 
-      {/* Tailwind animatsiyasini qo'shish */}
+      {/* 🔹 Link */}
+      <a
+        href="https://t.me/DevMirzo"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-6 font-semibold transition-all duration-300 hover:underline"
+        style={{ color: "#384B70" }}
+      >
+        @DevMirzo Telegram’da
+      </a>
+
+      {/* 🔹 Custom animatsiya */}
       <style>
         {`
           @keyframes loading {
-            0% { width: 0; }
-            50% { width: 100%; }
-            100% { width: 0; }
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(0%); }
+            100% { transform: translateX(100%); }
           }
           .animate-loading {
-            animation: loading 2s infinite;
+            animation: loading 2s infinite ease-in-out;
           }
         `}
       </style>

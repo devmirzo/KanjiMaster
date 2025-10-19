@@ -1,4 +1,3 @@
-// src/pages/LoginPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useKanjis } from "../context/KanjiContext";
@@ -62,13 +61,13 @@ const LoginPage = () => {
 
   return (
     <motion.div
-      className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#FCFAEE] to-[#e7e9f3]"
+      className="flex min-h-screen items-center justify-center "
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
     >
       <motion.div
-        className="w-full max-w-md rounded-3xl bg-[#FCFAEE] p-10 shadow-2xl"
+        className="w-full max-w-md rounded-3xl border border-[#384B70] bg-[#FCFAEE] p-10 shadow-2xl"
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -102,7 +101,7 @@ const LoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
+              className="w-full rounded-xl border border-[#384B70] p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
             />
           </div>
 
@@ -119,7 +118,7 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
+              className="w-full rounded-xl border border-[#384B70] p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
             />
           </div>
 
@@ -132,7 +131,7 @@ const LoginPage = () => {
             transition={{ type: "spring", stiffness: 250 }}
             className={`w-full rounded-xl py-2 font-semibold ${
               loading
-                ? "cursor-not-allowed bg-[#7b8bb4] text-[#FCFAEE]"
+                ? "cursor-not-allowed bg-[#384B70]/50 text-[#FCFAEE]"
                 : "bg-[#384B70] text-[#FCFAEE] hover:bg-[#2d3c5c]"
             }`}
           >
@@ -140,7 +139,7 @@ const LoginPage = () => {
           </motion.button>
         </motion.form>
 
-        {/* Yoki Google orqali */}
+        {/* Yoki */}
         <motion.div
           className="my-3 flex items-center"
           initial={{ opacity: 0 }}

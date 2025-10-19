@@ -7,8 +7,10 @@ import { ProtectedRoute } from "./components";
 
 import {
   AboutPage,
+  FavoritesPage,
   KanjiDetailPage,
   KanjiPage,
+  LearnedPage,
   LevelsPage,
   LoginPage,
   ProfilePage,
@@ -28,7 +30,9 @@ const router = createBrowserRouter([
       { index: true, element: <LevelsPage /> },
       { path: "about", element: <AboutPage /> },
       { path: "profile", element: <ProfilePage /> },
+      { path: "learned", element: <LearnedPage /> },
       { path: "kanji/:level", element: <KanjiPage /> },
+      { path: "favorites", element: <FavoritesPage /> },
       { path: "kanji/detail/:id", element: <KanjiDetailPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],

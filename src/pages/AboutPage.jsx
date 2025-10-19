@@ -1,3 +1,4 @@
+// src/pages/About.jsx
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaTelegramPlane, FaGithub, FaYoutube } from "react-icons/fa";
@@ -7,94 +8,96 @@ const About = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = `Kanji Master | About`;
+    document.title = `KanjiMaster | About`;
   }, []);
 
   return (
-    <div className="min-h-screen  text-[#2C3E5D] flex flex-col">
+    <div className="flex min-h-screen flex-col  transition-colors duration-500">
       {/* 🔙 Orqaga tugma */}
       <div className="p-4 sm:p-6">
         <button
           onClick={() => navigate(-1)}
-          className="px-4 py-2 text-xs sm:text-sm md:text-base rounded-lg bg-[#384B70] text-[#FCFAEE] font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+          className="rounded-lg bg-[#384B70] px-4 py-2 text-xs font-semibold text-[#FCFAEE] shadow-md transition-all duration-300 hover:scale-105 hover:opacity-90 active:scale-95 sm:text-sm md:text-base"
         >
           ← Orqaga
         </button>
       </div>
 
-      {/* 🔹 Hero qismi */}
+      {/* 🔹 Hero bo‘limi */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center mt-4 sm:mt-10 px-3 sm:px-6"
+        className="mt-4 px-3 text-center sm:mt-10 sm:px-6"
       >
-        <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-2 text-[#384B70] leading-tight">
+        <h1 className="mb-2 text-3xl leading-tight font-extrabold text-[#384B70] sm:text-4xl md:text-5xl">
           KanjiMast
         </h1>
-        <p className="text-sm sm:text-base md:text-lg text-[#2C3E5D]/80 max-w-md mx-auto leading-relaxed">
+        <p className="mx-auto max-w-md text-sm leading-relaxed text-[#384B70]/70 sm:text-base md:text-lg">
           Yapon tili kanjilarini o‘rganish uchun interaktiv platforma
         </p>
       </motion.div>
 
       {/* 🔹 Asosiy kontent */}
-      <div className="max-w-4xl w-full mx-auto p-4 sm:p-6 mt-6 sm:mt-10 space-y-6 sm:space-y-10">
-        {/* 🔹 Dastur haqida */}
+      <div className="mx-auto mt-8 w-full max-w-4xl space-y-8 p-4 sm:mt-12 sm:space-y-12 sm:p-6">
+        {/* 🔸 Dastur haqida */}
         <motion.section
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl p-5 sm:p-8 border border-[#384B70]/10"
+          className="rounded-2xl border border-[#384B70]/30 bg-[#FCFAEE] p-6 text-[#384B70] shadow-lg sm:p-8"
         >
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 border-l-4 border-[#384B70] pl-3 leading-snug">
-            Nima uchun <span className="text-[#384B70]">KanjiMast?</span>
+          <h2 className="mb-3 border-l-4 border-[#384B70] pl-3 text-xl leading-snug font-bold text-[#384B70] sm:mb-4 sm:text-2xl md:text-3xl">
+            Nima uchun{" "}
+            <span className="font-extrabold text-[#384B70]">KanjiMast?</span>
           </h2>
-          <p className="text-sm sm:text-base md:text-lg leading-relaxed text-[#2C3E5D]/90">
+          <p className="text-sm leading-relaxed text-[#384B70]/70 sm:text-base md:text-lg">
             KanjiMast – bu oddiy o‘quv dastur emas, balki sizni yapon tiliga
             oshno qiluvchi raqamli do‘stdir. Har bir kanji uchun:
           </p>
-          <ul className="list-disc pl-6 mt-3 text-[#2C3E5D]/90 space-y-1 sm:space-y-2 text-sm sm:text-base">
+          <ul className="mt-3 list-disc space-y-1 pl-6 text-sm sm:space-y-2 sm:text-base">
             <li>Onyomi va Kunyomi o‘qilishi</li>
             <li>Ma’nosi va amaliy misollar</li>
             <li>Yozilish animatsiyasi (GIF)</li>
             <li>N5–N1 darajalargacha tizimlangan o‘rganish</li>
           </ul>
-          <p className="mt-4 text-[#2C3E5D]/80 text-sm sm:text-base md:text-lg leading-relaxed">
+          <p className="mt-4 text-sm leading-relaxed text-[#384B70]/70 sm:text-base md:text-lg">
             Dastur sizga asta-sekinlik bilan yapon yozuv tizimini
             o‘zlashtirishda yordam beradi. Maqsad – o‘rganishni oson, esda
             qolarli va zavqli qilish.
           </p>
         </motion.section>
 
-        {/* 🔹 Dasturchi haqida */}
+        {/* 🔸 Dasturchi haqida */}
         <motion.section
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="bg-gradient-to-tr from-[#384B70] to-[#2C3E5D] rounded-2xl shadow-xl p-5 sm:p-8 text-[#FCFAEE]"
+          className="rounded-2xl bg-gradient-to-tr from-[#384B70]/10 to-[#384B70]/20 p-6 text-[#384B70] shadow-xl sm:p-8"
         >
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">
-            👨‍💻 Dasturchi haqida
+          <h2 className="mb-3 text-xl font-bold sm:mb-4 sm:text-2xl md:text-3xl">
+            Dasturchi haqida
           </h2>
-          <p className="text-sm sm:text-base md:text-lg leading-relaxed mb-3 opacity-90">
-            Men <span className="font-semibold">Humoyun Mirzo</span> – IT
-            Universe Academy asoschisi va frontend dasturchiman. Texnologiya
-            orqali o‘rganishni ilhomlantirish va yoshlarni global miqyosda
-            raqobatbardosh qilish mening eng katta maqsadim.
+          <p className="mb-3 text-sm leading-relaxed text-[#384B70]/80 sm:text-base md:text-lg">
+            Men{" "}
+            <span className="font-semibold text-[#384B70]">Humoyun Mirzo</span>{" "}
+            – IT Universe Academy asoschisi va frontend dasturchiman.
+            Texnologiya orqali o‘rganishni ilhomlantirish va yoshlarni global
+            miqyosda raqobatbardosh qilish mening eng katta maqsadim.
           </p>
-          <p className="text-sm sm:text-base md:text-lg leading-relaxed opacity-90">
+          <p className="text-sm leading-relaxed text-[#384B70]/80 sm:text-base md:text-lg">
             KanjiMast loyihasi – bu mening yapon tiliga va o‘rganishga bo‘lgan
             muhabbatimning mahsuli. Har bir satr – yangi bilim sari qadam.
           </p>
 
-          {/* 🔹 Ijtimoiy tarmoqlar */}
-          <div className="flex justify-center flex-wrap gap-6 sm:gap-8 text-2xl sm:text-3xl mt-6">
+          {/* 🔸 Ijtimoiy tarmoqlar */}
+          <div className="mt-6 flex flex-wrap justify-center gap-6 text-2xl sm:gap-8 sm:text-3xl">
             <motion.a
               whileHover={{ scale: 1.15 }}
               href="https://t.me/DevMirzo"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-blue-400 transition-all"
+              className="text-[#384B70] transition-all hover:text-[#1B2A4A]"
             >
               <FaTelegramPlane />
             </motion.a>
@@ -103,7 +106,7 @@ const About = () => {
               href="https://github.com/devmirzo"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-gray-200 transition-all"
+              className="text-[#384B70] transition-all hover:text-[#1B2A4A]"
             >
               <FaGithub />
             </motion.a>
@@ -112,21 +115,21 @@ const About = () => {
               href="https://youtube.com/@DevMirzo"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-red-400 transition-all"
+              className="text-[#FF6B6B] transition-all hover:text-[#C24444]"
             >
               <FaYoutube />
             </motion.a>
           </div>
         </motion.section>
 
-        {/* 🔹 Yakuniy so‘z */}
+        {/* 🔸 Yakuniy so‘z */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.6 }}
-          className="text-center mt-6 sm:mt-10 px-3"
+          className="mt-6 px-3 text-center sm:mt-10"
         >
-          <p className="text-[#2C3E5D]/80 text-sm sm:text-base md:text-lg italic leading-relaxed max-w-md mx-auto">
+          <p className="mx-auto max-w-md text-sm leading-relaxed text-[#384B70]/70 italic sm:text-base md:text-lg">
             “O‘rganish – bu cheksiz yo‘l. Har bir kanji – yangi eshik.”
           </p>
         </motion.div>

@@ -8,7 +8,7 @@ const NotFoundPage = () => {
   const circles = Array.from({ length: 30 });
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-[#FCFAEE] py-10 text-center text-[#384B70]">
+    <div className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden py-10 text-center text-[#384B70]">
       {/* 🔹 Harakatlanuvchi fon doiralar */}
       {circles.map((_, i) => (
         <motion.div
@@ -52,7 +52,7 @@ const NotFoundPage = () => {
             }}
             className="relative"
           >
-            <FileCog className="h-36 w-36 text-[#384b70]" />
+            <FileCog className="h-36 w-36 text-[#384B70]" />
             <motion.div
               className="absolute top-1/2 left-1/2"
               style={{ translateX: "-50%", translateY: "-50%" }}
@@ -67,7 +67,7 @@ const NotFoundPage = () => {
                 ease: "easeInOut",
               }}
             >
-              <Search className="h-16 w-16 text-[#e14d17]" />
+              <Search className="h-16 w-16 text-[#4278e3]" />
             </motion.div>
           </motion.div>
         </div>
@@ -85,7 +85,7 @@ const NotFoundPage = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="-mt-8 text-3xl mb-0 font-semibold sm:text-3xl"
+          className="-mt-8 mb-0 text-3xl font-semibold sm:text-3xl"
         >
           Sahifa topilmadi
         </motion.h2>
@@ -94,10 +94,10 @@ const NotFoundPage = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="mt-0 mb-0 max-w-md text-sm text-gray-600 sm:text-base"
+          className="mt-0 mb-0 max-w-md text-sm text-[#384B70]/70 sm:text-base"
         >
           Ehtimol siz noto‘g‘ri manzilga kirdingiz yoki bu sahifa hali
-          <span className="font-medium text-[#2C3E5D]"> tayyor emas</span>.
+          <span className="font-medium text-[#384B70]"> tayyor emas</span>.
         </motion.p>
       </motion.div>
 
@@ -105,7 +105,7 @@ const NotFoundPage = () => {
       <motion.button
         whileHover={{
           scale: 1.05,
-          backgroundColor: "#2C3E5D",
+          backgroundColor: "#384B70",
           boxShadow: "0 0 25px rgba(56,75,112,0.35)",
         }}
         whileTap={{ scale: 0.95 }}

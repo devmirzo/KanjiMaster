@@ -23,7 +23,6 @@ const RegisterPage = () => {
     document.title = `Register`;
   }, []);
 
-  // ✅ Agar foydalanuvchi allaqachon login bo‘lsa
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -34,15 +33,12 @@ const RegisterPage = () => {
     return () => unsubscribe();
   }, [navigate, setUser]);
 
-  // ✅ Google orqali login
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
       const result = await signInWithPopup(auth, googleProvider);
       setUser(result.user);
-
       navigate("/");
-      // Toast global darajada chiqadi
       setTimeout(() => {
         toast.success(`Salom, ${result.user.displayName || "dasturchi"}! 👋`);
       }, 300);
@@ -53,15 +49,12 @@ const RegisterPage = () => {
     }
   };
 
-  // ✅ Email orqali ro‘yxatdan o‘tish
   const handleRegister = async (e) => {
     e.preventDefault();
-
     if (password !== confirmPassword) {
       toast.error("Parollar mos emas! Iltimos, tekshirib qayta kiriting.");
       return;
     }
-
     try {
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
@@ -69,13 +62,9 @@ const RegisterPage = () => {
         email,
         password,
       );
-
       await updateProfile(userCredential.user, { displayName: name });
       setUser({ ...userCredential.user, displayName: name });
-
-      // Sahifani almashtiramiz
       navigate("/");
-      // Toastni biroz kechiktirib global holatda ko‘rsatamiz
       setTimeout(() => {
         toast.success(`🎉 Xush kelibsiz, ${name}! 👋`);
       }, 300);
@@ -88,7 +77,7 @@ const RegisterPage = () => {
 
   return (
     <motion.div
-      className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#FCFAEE] to-[#e7e9f3]"
+      className="flex min-h-screen items-center justify-center "
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -108,7 +97,6 @@ const RegisterPage = () => {
           Ro‘yxatdan o‘tish
         </motion.h1>
 
-        {/* 🔹 Forma */}
         <motion.form
           onSubmit={handleRegister}
           className="space-y-5"
@@ -116,69 +104,56 @@ const RegisterPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          {/* 🔸 Ism */}
-          <motion.div whileFocus={{ scale: 1.03 }}>
+          <div>
             <label className="block font-semibold text-[#384B70]">Ism</label>
             <motion.input
               type="text"
-              whileFocus={{ scale: 1.03 }}
-              transition={{ type: "spring", stiffness: 300 }}
               placeholder="Humoyun Mirzo"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
               required
+              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
             />
-          </motion.div>
+          </div>
 
-          {/* 🔸 Email */}
           <div>
             <label className="block font-semibold text-[#384B70]">Email</label>
             <motion.input
               type="email"
-              whileFocus={{ scale: 1.03 }}
-              transition={{ type: "spring", stiffness: 300 }}
               placeholder="example@mail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
               required
+              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
             />
           </div>
 
-          {/* 🔸 Parol */}
           <div>
             <label className="block font-semibold text-[#384B70]">Parol</label>
             <motion.input
               type="password"
-              whileFocus={{ scale: 1.03 }}
-              transition={{ type: "spring", stiffness: 300 }}
               placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
               required
+              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
             />
           </div>
 
-          {/* 🔸 Parolni tasdiqlash */}
           <div>
             <label className="block font-semibold text-[#384B70]">
               Parolni tasdiqlang
             </label>
             <motion.input
               type="password"
-              whileFocus={{ scale: 1.03 }}
-              transition={{ type: "spring", stiffness: 300 }}
               placeholder="********"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
               required
+              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
             />
           </div>
 
-          {/* 🔹 Submit tugmasi */}
           <motion.button
             type="submit"
             disabled={loading}
@@ -194,19 +169,12 @@ const RegisterPage = () => {
           </motion.button>
         </motion.form>
 
-        {/* 🔹 Yoki Google orqali */}
-        <motion.div
-          className="my-3 flex items-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
+        <div className="my-3 flex items-center">
           <div className="flex-grow border-t border-[#384B70]/30"></div>
           <span className="mx-5 text-sm text-[#384B70]/70">yoki</span>
           <div className="flex-grow border-t border-[#384B70]/30"></div>
-        </motion.div>
+        </div>
 
-        {/* 🔹 Google tugmasi */}
         <motion.button
           onClick={handleGoogleLogin}
           disabled={loading}
@@ -222,13 +190,7 @@ const RegisterPage = () => {
           Google orqali kirish
         </motion.button>
 
-        {/* 🔹 Login link */}
-        <motion.p
-          className="mt-6 text-center text-sm text-[#384B70]/80"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
+        <p className="mt-6 text-center text-sm text-[#384B70]/80">
           Hisobingiz bormi?{" "}
           <Link
             to="/login"
@@ -236,7 +198,7 @@ const RegisterPage = () => {
           >
             Kirish
           </Link>
-        </motion.p>
+        </p>
       </motion.div>
     </motion.div>
   );
