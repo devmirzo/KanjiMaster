@@ -99,7 +99,7 @@ const LevelsPage = () => {
           onChange={handleChange}
           onCompositionStart={handleCompositionStart}
           onCompositionEnd={handleCompositionEnd}
-          className="w-full rounded-2xl border border-[#384B70] bg-[#FCFAEE] px-4 py-3 text-[#384B70] placeholder-[#384B70]/60 shadow-sm transition-all duration-200 outline-none focus:border-[#384B70] focus:ring-2 focus:ring-[#384B70]/30"
+          className="w-full rounded-2xl border border-[#384B70] bg-[#FCFAEE] px-4 py-3 text-[#384B70] placeholder-[#384B70]/60 shadow-sm outline-none focus:border-[#384B70] focus:ring-2 focus:ring-[#384B70]/30 transition-all duration-200"
         />
       </div>
 
