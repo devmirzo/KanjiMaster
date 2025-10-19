@@ -1,14 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useKanjis } from "../../context/KanjiContext";
-import { Menu, X, LogOut, User, Heart, BookOpen } from "lucide-react";
+import {
+  Menu,
+  X,
+  LogOut,
+  User,
+  Heart,
+  BookOpen,
+  Sun,
+  Moon,
+} from "lucide-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user, logout } = useKanjis(); // endi darkMode kerak emas
+  const { user, logout } = useKanjis();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false); // Dark mode holati
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -21,6 +30,12 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Dark mode toggle handler
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => !prev);
+    document.documentElement.classList.toggle("dark", !darkMode);
+  };
+
   return (
     <nav className="sticky top-0 z-50 border-b border-[#384B70]/20 bg-[#FCFAEE] text-[#384B70] shadow-md transition-all duration-300">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -32,18 +47,7 @@ const Navbar = () => {
           KanjiMast
         </h1>
 
-        {/* 🔹 O‘ng tomondagi menyu */}
         <div className="flex items-center gap-4 md:gap-6">
-          {/* 🌙 Mobil menyu tugmasi */}
-          <button
-            onClick={() => setMenuOpen((prev) => !prev)}
-            aria-label="Toggle menu"
-            className="text-[#384B70] transition-transform duration-300 hover:scale-110 hover:text-[#2E3E5E] md:hidden"
-          >
-            {menuOpen ? <X size={26} /> : <Menu size={26} />}
-          </button>
-
-          {/* 👤 Foydalanuvchi mavjud bo‘lsa */}
           {user ? (
             <div
               ref={dropdownRef}
@@ -61,11 +65,18 @@ const Navbar = () => {
 
               {dropdownOpen && (
                 <div className="absolute top-20 right-0 w-56 overflow-hidden rounded-xl border border-[#384B70]/20 bg-[#FCFAEE] text-[#384B70] shadow-md transition-all duration-300">
-                  {/* Header */}
+                  {/* Header + Dark Mode */}
                   <div className="flex items-center justify-between border-b border-[#384B70]/20 px-4 py-2">
                     <span className="text-sm font-semibold">
                       {user.displayName || "Foydalanuvchi"}
                     </span>
+                    <button
+                      onClick={toggleDarkMode}
+                      className="flex items-center gap-1 rounded-full px-1 py-1 text-xs font-semibold text-[#384B70]"
+                      title={darkMode ? "Light Mode" : "Dark Mode"}
+                    >
+                      {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
                   </div>
 
                   {/* Menyu elementlari */}
@@ -112,7 +123,6 @@ const Navbar = () => {
               )}
             </div>
           ) : (
-            // 🔹 Foydalanuvchi yo‘q bo‘lsa
             <div className="hidden gap-3 md:flex">
               <button
                 onClick={() => navigate("/login")}
@@ -130,57 +140,6 @@ const Navbar = () => {
           )}
         </div>
       </div>
-
-      {/* 📱 Mobil menyu */}
-      {menuOpen && (
-        <div className="flex flex-col items-center space-y-3 border-t border-[#384B70]/20 bg-[#FCFAEE] py-4 text-[#384B70] shadow-inner transition-all duration-300 md:hidden">
-          {user ? (
-            <>
-              {[
-                { label: "Profil", path: "/profile" },
-                { label: "Sevimli", path: "/favorites" },
-                { label: "O‘rganilgan", path: "/learned" },
-              ].map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => {
-                    navigate(item.path);
-                    setMenuOpen(false);
-                  }}
-                  className="font-medium transition-colors duration-200 hover:text-[#2E3E5E] hover:underline"
-                >
-                  {item.label}
-                </button>
-              ))}
-
-              <button
-                onClick={() => {
-                  logout();
-                  setMenuOpen(false);
-                }}
-                className="font-semibold text-[#E63946] transition-all duration-200 hover:underline"
-              >
-                Chiqish
-              </button>
-            </>
-          ) : (
-            <>
-              {["Kirish", "Ro‘yxatdan o‘tish"].map((label, i) => (
-                <button
-                  key={label}
-                  onClick={() => {
-                    navigate(i === 0 ? "/login" : "/register");
-                    setMenuOpen(false);
-                  }}
-                  className="font-medium transition-colors duration-200 hover:text-[#2E3E5E] hover:underline"
-                >
-                  {label}
-                </button>
-              ))}
-            </>
-          )}
-        </div>
-      )}
     </nav>
   );
 };
