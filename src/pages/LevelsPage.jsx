@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useMemo, useTransition } from "react";
+// src/pages/LevelsPage.jsx
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useKanjis } from "../context/KanjiContext";
@@ -9,17 +10,26 @@ const LevelsPage = () => {
   const navigate = useNavigate();
   const { kanjis, levels, loading, error } = useKanjis();
   const [search, setSearch] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [isComposing, setIsComposing] = useState(false);
 
   useEffect(() => {
     document.title = "Bosh sahifa | KanjiMaster";
   }, []);
 
-  const onSearchChange = (e) => {
-    const value = e.target.value;
-    startTransition(() => setSearch(value));
+  // IME-friendly input handler
+  const handleChange = (e) => {
+    if (!isComposing) {
+      setSearch(e.target.value);
+    }
   };
 
+  const handleCompositionStart = () => setIsComposing(true);
+  const handleCompositionEnd = (e) => {
+    setIsComposing(false);
+    setSearch(e.target.value);
+  };
+
+  // Qidiruv natijalari
   const filteredKanjis = useMemo(() => {
     const query = search.trim().toLowerCase();
     if (!query) return [];
@@ -65,7 +75,7 @@ const LevelsPage = () => {
 
   return (
     <motion.div
-      className="flex min-h-screen flex-col items-center justify-start  px-4 py-12 text-[#384B70] transition-colors duration-300 sm:px-6 md:px-10"
+      className="flex min-h-screen flex-col items-center justify-start px-4 py-12 text-[#384B70] sm:px-6 md:px-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
@@ -86,8 +96,10 @@ const LevelsPage = () => {
           type="text"
           placeholder="Kanji, Onyomi, Kunyomi yoki tarjima yozing..."
           value={search}
-          onChange={onSearchChange}
-          className={`w-full rounded-2xl border border-[#384B70] bg-[#FCFAEE] px-4 py-3 text-[#384B70] placeholder-[#384B70]/60 shadow-sm transition-all duration-200 outline-none focus:border-[#384B70] focus:ring-2 focus:ring-[#384B70]/30 ${isPending ? "opacity-70" : ""}`}
+          onChange={handleChange}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={handleCompositionEnd}
+          className="w-full rounded-2xl border border-[#384B70] bg-[#FCFAEE] px-4 py-3 text-[#384B70] placeholder-[#384B70]/60 shadow-sm transition-all duration-200 outline-none focus:border-[#384B70] focus:ring-2 focus:ring-[#384B70]/30"
         />
       </div>
 

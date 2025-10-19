@@ -44,7 +44,7 @@ const Navbar = () => {
           onClick={() => navigate("/")}
           className="cursor-pointer text-3xl font-bold tracking-wide text-[#384B70] transition-transform duration-300 hover:scale-105 hover:text-[#2E3E5E]"
         >
-          KanjiMast
+          KanjiMast``
         </h1>
 
         <div className="flex items-center gap-4 md:gap-6">
