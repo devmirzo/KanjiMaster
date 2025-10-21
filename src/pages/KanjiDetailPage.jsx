@@ -11,7 +11,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { useKanjis } from "../context/KanjiContext";
-import { Error, Loading,  } from "../components";
+import { Error, Loading } from "../components";
 
 const KanjiDetailPage = () => {
   const { id } = useParams();
@@ -43,7 +43,7 @@ const KanjiDetailPage = () => {
       <Error message={error.message} onRetry={() => window.location.reload()} />
     );
   if (!kanji)
-    return <NotFound message="Kanji topilmadi." onBack={() => navigate(-1)} />;
+    return <Error message="Kanji topilmadi." onRetry={() => navigate(-1)} />;
 
   const isFavorite = favorites.includes(kanji.id);
   const isLearned = learned.includes(kanji.id);
@@ -62,7 +62,7 @@ const KanjiDetailPage = () => {
 
   return (
     <motion.div
-      className="min-h-screen  p-6 text-[#384B70] sm:p-8 lg:p-12"
+      className="min-h-screen p-6 sm:p-8 lg:p-12"
       variants={pageVariants}
       initial="hidden"
       animate="visible"
@@ -73,7 +73,7 @@ const KanjiDetailPage = () => {
         onClick={() => navigate(-1)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="mb-6 flex items-center gap-2 rounded-lg text-[#384B70] px-5 py-2 font-medium bg-[#FCFAEE] shadow-md transition hover:text-[#2f3d5c]"
+        className="mb-6 flex items-center gap-2 rounded-lg border-2 border-[#E5E5E0] bg-white px-5 py-2 font-medium text-[#51648F] shadow-md transition hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#F2C46D] dark:hover:border-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
       >
         <ArrowLeft className="h-5 w-5" />
         Orqaga
@@ -81,7 +81,7 @@ const KanjiDetailPage = () => {
 
       {/* 🔹 Kanji belgisi */}
       <motion.div className="mb-10 text-center">
-        <motion.h1 className="text-[7rem] leading-none font-light drop-shadow-md sm:text-[9rem] lg:text-[11rem]">
+        <motion.h1 className="text-[7rem] leading-none font-light text-[#384B70] drop-shadow-md sm:text-[9rem] lg:text-[11rem] dark:text-[#FCFAEE]">
           {kanji.kanji_text}
         </motion.h1>
       </motion.div>
@@ -91,9 +91,9 @@ const KanjiDetailPage = () => {
         <motion.button
           onClick={() => navigate(`/kanji/${kanji.level}`)}
           whileHover={{ scale: 1.05 }}
-          className="inline-flex items-center gap-2 rounded-full border border-[#384B70] bg-[#FCFAEE] px-6 py-1 text-lg font-medium text-[#384B70] transition hover:bg-[#eae7d8]"
+          className="inline-flex items-center gap-2 rounded-full border-2 border-[#384B70] bg-white px-6 py-1 text-lg font-medium text-[#384B70] transition hover:bg-[#FCFAEE] dark:border-[#F2C46D] dark:bg-[#263347] dark:text-[#F2C46D] dark:hover:bg-[#1E2A3C]"
         >
-          <span className="h-2 w-2 animate-pulse rounded-full bg-[#384B70]" />
+          <span className="h-2 w-2 animate-pulse rounded-full bg-[#384B70] dark:bg-[#F2C46D]" />
           {kanji.level} daraja
         </motion.button>
 
@@ -102,23 +102,23 @@ const KanjiDetailPage = () => {
           <motion.button
             onClick={() => toggleFavorite(kanji.id)}
             whileHover={{ scale: 1.02 }}
-            className={`flex items-center justify-center rounded-l-full border border-[#384B70] px-7 py-2 transition-all ${
+            className={`flex items-center justify-center rounded-l-full border-2 px-7 py-2 transition-all ${
               isFavorite
-                ? "bg-[#384B70] text-[#FCFAEE]"
-                : "bg-[#FCFAEE] text-[#384B70] hover:bg-[#eae7d8]"
+                ? "border-[#E63946] bg-[#E63946] text-white dark:border-[#FF6B6B] dark:bg-[#FF6B6B] dark:text-[#1E2A3C]"
+                : "border-[#E5E5E0] bg-white text-[#E63946] hover:bg-[#FCFAEE] dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#FF6B6B] dark:hover:bg-[#1E2A3C]"
             }`}
           >
             {isFavorite ? <HeartOff size={20} /> : <Heart size={20} />}
           </motion.button>
 
-          {/* 📗 O‘rganilgan */}
+          {/* 📗 O'rganilgan */}
           <motion.button
             onClick={() => toggleLearned(kanji.id)}
             whileHover={{ scale: 1.02 }}
-            className={`flex items-center justify-center rounded-r-full border border-[#384B70] px-7 py-2 transition-all ${
+            className={`flex items-center justify-center rounded-r-full border-2 px-7 py-2 transition-all ${
               isLearned
-                ? "bg-[#384B70] text-[#FCFAEE]"
-                : "bg-[#FCFAEE] text-[#384B70] hover:bg-[#eae7d8]"
+                ? "border-[#4CAF50] bg-[#4CAF50] text-white dark:border-[#7DCE82] dark:bg-[#7DCE82] dark:text-[#1E2A3C]"
+                : "border-[#E5E5E0] bg-white text-[#4CAF50] hover:bg-[#FCFAEE] dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#7DCE82] dark:hover:bg-[#1E2A3C]"
             }`}
           >
             {isLearned ? <BookOpenCheck size={20} /> : <BookOpen size={20} />}
@@ -127,11 +127,13 @@ const KanjiDetailPage = () => {
       </div>
 
       {/* 🔹 Asosiy konteyner */}
-      <motion.div className="mx-auto max-w-5xl space-y-6 rounded-2xl border border-[#384B70]/40 bg-white p-6 shadow-lg">
+      <motion.div className="mx-auto max-w-5xl space-y-6 rounded-2xl border-2 border-[#E5E5E0] bg-white p-6 shadow-lg dark:border-[#2F3D57] dark:bg-[#263347]">
         {/* ✍️ Yozilish tartibi */}
         {(kanji.stroke_video || kanji.stroke_order_svgs?.length > 0) && (
           <div className="text-center">
-            <h2 className="mb-3 text-xl font-semibold">Yozilish tartibi</h2>
+            <h2 className="mb-3 text-xl font-semibold text-[#2E2E2E] dark:text-white">
+              Yozilish tartibi
+            </h2>
             <div className="flex flex-wrap justify-center gap-3">
               {kanji.stroke_video && (
                 <video
@@ -140,7 +142,7 @@ const KanjiDetailPage = () => {
                   loop
                   muted
                   playsInline
-                  className="h-20 w-20 rounded-xl border border-[#384B70]/30 object-contain shadow-sm"
+                  className="h-20 w-20 rounded-xl border-2 border-[#E5E5E0] object-contain shadow-sm dark:border-[#2F3D57]"
                 />
               )}
               {kanji.stroke_order_svgs?.map((url, i) => (
@@ -148,29 +150,39 @@ const KanjiDetailPage = () => {
                   key={i}
                   src={url}
                   alt={`stroke-${i}`}
-                  className="h-20 w-20 rounded-xl border border-[#384B70]/30 object-contain shadow-sm"
+                  className="h-20 w-20 rounded-xl border-2 border-[#E5E5E0] object-contain shadow-sm dark:border-[#2F3D57]"
                 />
               ))}
             </div>
           </div>
         )}
 
-        {/* 🈷️ On’yomi */}
+        {/* 🈷️ On'yomi */}
         <div>
-          <h2 className="text-xl font-semibold">On’yomi</h2>
-          <p className="mt-2 text-2xl break-words">{kanji.onyomi}</p>
+          <h2 className="text-xl font-semibold text-[#2E2E2E] dark:text-white">
+            On'yomi
+          </h2>
+          <p className="mt-2 text-2xl break-words text-[#384B70] dark:text-[#F2C46D]">
+            {kanji.onyomi}
+          </p>
         </div>
 
-        {/* 🈶 Kun’yomi */}
+        {/* 🈶 Kun'yomi */}
         <div>
-          <h2 className="text-xl font-semibold">Kun’yomi</h2>
-          <p className="mt-2 text-2xl break-words">{kanji.kunyomi}</p>
+          <h2 className="text-xl font-semibold text-[#2E2E2E] dark:text-white">
+            Kun'yomi
+          </h2>
+          <p className="mt-2 text-2xl break-words text-[#384B70] dark:text-[#F2C46D]">
+            {kanji.kunyomi}
+          </p>
         </div>
 
         {/* 🇯🇵 Tarjima */}
         <div>
-          <h2 className="text-xl font-semibold">Tarjimasi</h2>
-          <p className="mt-2 text-2xl first-letter:uppercase">
+          <h2 className="text-xl font-semibold text-[#2E2E2E] dark:text-white">
+            Tarjimasi
+          </h2>
+          <p className="mt-2 text-2xl text-[#6B6B6B] first-letter:uppercase dark:text-[#BFC8D8]">
             {Array.isArray(kanji.tarjima)
               ? kanji.tarjima.join(", ")
               : kanji.tarjima}
@@ -180,35 +192,43 @@ const KanjiDetailPage = () => {
         {/* 📖 Misollar */}
         {examples.length > 0 && (
           <div>
-            <h2 className="mb-3 text-xl font-semibold">
-              Kanjidan yasalgan so‘zlar
+            <h2 className="mb-3 text-xl font-semibold text-[#2E2E2E] dark:text-white">
+              Kanjidan yasalgan so'zlar
             </h2>
-            <div className="overflow-x-auto rounded-lg border border-[#384B70]/40">
-              <table className="min-w-full divide-y divide-[#384B70]/30 text-sm sm:text-base">
-                <thead className="bg-[#eae7d8]">
+            <div className="overflow-x-auto rounded-lg border-2 border-[#E5E5E0] dark:border-[#2F3D57]">
+              <table className="min-w-full divide-y divide-[#E5E5E0] text-sm sm:text-base dark:divide-[#2F3D57]">
+                <thead className="bg-[#FCFAEE] dark:bg-[#1E2A3C]">
                   <tr>
-                    {["So‘z", "Furigana", "Tarjima", "Audio"].map((h, i) => (
-                      <th key={i} className="px-4 py-2 text-left font-semibold">
+                    {["So'z", "Furigana", "Tarjima", "Audio"].map((h, i) => (
+                      <th
+                        key={i}
+                        className="px-4 py-2 text-left font-semibold text-[#2E2E2E] dark:text-white"
+                      >
                         {h}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-[#E5E5E0] dark:divide-[#2F3D57]">
                   {examples.map((ex, i) => (
-                    <tr key={i} className="transition hover:bg-[#384B70]/10">
-                      <td className="px-4 py-2 text-lg font-semibold">
+                    <tr
+                      key={i}
+                      className="transition hover:bg-[#FCFAEE] dark:hover:bg-[#1E2A3C]"
+                    >
+                      <td className="px-4 py-2 text-lg font-semibold text-[#384B70] dark:text-[#F2C46D]">
                         {ex.word}
                       </td>
-                      <td className="px-4 py-2">{ex.furigana}</td>
-                      <td className="px-4 py-2 first-letter:uppercase">
+                      <td className="px-4 py-2 text-[#6B6B6B] dark:text-[#BFC8D8]">
+                        {ex.furigana}
+                      </td>
+                      <td className="px-4 py-2 text-[#6B6B6B] first-letter:uppercase dark:text-[#BFC8D8]">
                         {ex.translation}
                       </td>
                       <td className="px-4 py-2">
                         {ex.audio && (
                           <button
                             onClick={() => new Audio(ex.audio).play()}
-                            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#384B70] text-[#FCFAEE] hover:bg-[#2f3d5c]"
+                            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#384B70] text-white transition hover:bg-[#2E3E5E] dark:bg-[#F2C46D] dark:text-[#1E2A3C] dark:hover:bg-[#E8E4D0]"
                           >
                             <img src="../../play.png" alt="play" />
                           </button>
@@ -229,7 +249,7 @@ const KanjiDetailPage = () => {
           <motion.button
             onClick={() => navigate(`/kanji/detail/${prevKanji.id}`)}
             whileHover={{ scale: 1.05 }}
-            className="flex items-center gap-2 rounded-lg text-[#384B70] px-5 py-2 bg-[#FCFAEE] shadow-md transition hover:text-[#2f3d5c]"
+            className="flex items-center gap-2 rounded-lg border-2 border-[#E5E5E0] bg-white px-5 py-2 text-[#51648F] shadow-md transition hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#F2C46D] dark:hover:border-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
           >
             <ArrowLeft size={18} /> Oldingi
           </motion.button>
@@ -241,7 +261,7 @@ const KanjiDetailPage = () => {
           <motion.button
             onClick={() => navigate(`/kanji/detail/${nextKanji.id}`)}
             whileHover={{ scale: 1.05 }}
-            className="flex items-center gap-2 rounded-lg text-[#384B70] px-5 py-2 bg-[#FCFAEE] shadow-md transition hover:text-[#2f3d5c]"
+            className="flex items-center gap-2 rounded-lg border-2 border-[#E5E5E0] bg-white px-5 py-2 text-[#51648F] shadow-md transition hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#F2C46D] dark:hover:border-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
           >
             Keyingi <ArrowRight size={18} />
           </motion.button>

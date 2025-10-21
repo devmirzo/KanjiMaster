@@ -65,14 +65,14 @@ const LevelsPage = () => {
 
   return (
     <motion.div
-      className="flex min-h-screen flex-col items-center justify-start  px-4 py-12 text-[#384B70] transition-colors duration-300 sm:px-6 md:px-10"
+      className="flex min-h-screen flex-col items-center justify-start px-4 py-12 transition-colors duration-300 sm:px-6 md:px-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
       {/* Sarlavha */}
       <motion.h1
-        className="mb-6 text-center text-3xl font-bold text-[#384B70] md:text-4xl"
+        className="mb-6 text-center text-3xl font-bold text-[#2E2E2E] md:text-4xl dark:text-white"
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -82,13 +82,16 @@ const LevelsPage = () => {
 
       {/* Qidiruv input */}
       <div className="mb-10 w-full max-w-md">
-        <input
-          type="text"
-          placeholder="Kanji, Onyomi, Kunyomi yoki tarjima yozing..."
-          value={search}
-          onChange={onSearchChange}
-          className={`w-full rounded-2xl border border-[#384B70] bg-[#FCFAEE] px-4 py-3 text-[#384B70] placeholder-[#384B70]/60 shadow-sm transition-all duration-200 outline-none focus:border-[#384B70] focus:ring-2 focus:ring-[#384B70]/30 ${isPending ? "opacity-70" : ""}`}
-        />
+        <div className="relative">
+          <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-[#7081A1] dark:text-[#51648F]" />
+          <input
+            type="text"
+            placeholder="Kanji, Onyomi, Kunyomi yoki tarjima yozing..."
+            value={search}
+            onChange={onSearchChange}
+            className={`w-full rounded-2xl border-2 border-[#E5E5E0] bg-white py-3 pr-4 pl-12 text-[#2E2E2E] placeholder-[#6B6B6B] shadow-sm transition-all duration-200 outline-none focus:border-[#384B70] focus:ring-2 focus:ring-[#384B70]/20 dark:border-[#2F3D57] dark:bg-[#263347] dark:text-white dark:placeholder-[#BFC8D8] dark:focus:border-[#F2C46D] dark:focus:ring-[#F2C46D]/20 ${isPending ? "opacity-70" : ""}`}
+          />
+        </div>
       </div>
 
       {/* Natijalar yoki Level kartalar */}
@@ -126,7 +129,7 @@ const LevelsPage = () => {
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               className="relative"
             >
-              <File className="h-36 w-36 text-[#384B70]/60" />
+              <File className="h-36 w-36 text-[#7081A1]/60 dark:text-[#51648F]/60" />
               <motion.div
                 className="absolute top-1/2 left-1/2"
                 style={{ translateX: "-50%", translateY: "-50%" }}
@@ -141,15 +144,15 @@ const LevelsPage = () => {
                   ease: "easeInOut",
                 }}
               >
-                <Search className="h-16 w-16 text-[#384B70]" />
+                <Search className="h-16 w-16 text-[#51648F] dark:text-[#F2C46D]" />
               </motion.div>
             </motion.div>
 
-            <p className="mt-8 text-2xl font-medium text-[#384B70]">
-              Bu kanji hali bizning galaktikamizda yo‘q
+            <p className="mt-8 text-2xl font-medium text-[#2E2E2E] dark:text-white">
+              Bu kanji hali bizning galaktikamizda yo'q
             </p>
-            <span className="text-md text-[#384B70]/70">
-              Boshqa belgini qidirib ko‘ring — siz haqiqiy kanji izlovchisiz
+            <span className="text-md text-[#6B6B6B] dark:text-[#BFC8D8]">
+              Boshqa belgini qidirib ko'ring — siz haqiqiy kanji izlovchisiz
             </span>
           </div>
         )
@@ -181,7 +184,7 @@ const LevelsPage = () => {
               }}
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate(`/kanji/${lvl}`)}
-              className="flex w-[120px] cursor-pointer items-center justify-center rounded-2xl border border-[#384B70] bg-[#FCFAEE] drop-shadow-md transition-all duration-300 hover:border-[#384B70]/80 sm:w-[130px] md:w-[140px] lg:w-[150px]"
+              className="flex w-[120px] cursor-pointer items-center justify-center rounded-2xl border-2 border-[#E5E5E0] bg-white drop-shadow-md transition-all duration-300 hover:border-[#384B70] sm:w-[130px] md:w-[140px] lg:w-[150px] dark:border-[#2F3D57] dark:bg-[#263347] dark:hover:border-[#F2C46D]"
             >
               <LevelCard level={lvl} />
             </motion.div>

@@ -39,5 +39,3 @@ module.exports = {
   },
   plugins: [],
 };
-
-// Endi shuni shu ranglarga moslab berchihar bir rangni kerakli joyga ishlat hech biri ishlatilmay qolmasin.

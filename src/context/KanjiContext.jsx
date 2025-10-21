@@ -18,23 +18,19 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 
-// Context yaratish
 export const KanjiContext = createContext();
 
 export const KanjiProvider = ({ children }) => {
-  // 🔹 Kanji ma’lumotlari
+  // 🔹 States
   const [kanjis, setKanjis] = useState([]);
   const [levels, setLevels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // 🔹 Auth ma’lumotlari
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-
-  // 🔹 Favorites va Learned
   const [favorites, setFavorites] = useState([]);
   const [learned, setLearned] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
 
   // ============================
   // 🗄 IndexedDB (Offline caching)
@@ -80,31 +76,40 @@ export const KanjiProvider = ({ children }) => {
   };
 
   // ============================
-  // 🔸 Supabase’dan Kanji olish
+  // 🔸 Supabase’dan Kanji olish (OPTIMIZED)
   // ============================
   useEffect(() => {
     let isMounted = true;
     const fetchKanjis = async () => {
       try {
+        setLoading(true);
+        // 1️⃣ Avval localStorage yoki IndexedDB dan o‘qiymiz
+        let data = [];
         const cached = localStorage.getItem("kanjis");
-        if (cached && isMounted) {
-          const parsed = JSON.parse(cached);
-          setKanjis(parsed);
-          setLevels([...new Set(parsed.map((k) => k.level))]);
+        if (cached) data = JSON.parse(cached);
+        else {
+          const indexed = await getFromIndexedDB();
+          if (indexed.length) data = indexed;
         }
 
-        const indexed = await getFromIndexedDB();
-        if (indexed.length && isMounted) setKanjis(indexed);
-
-        const { data, error } = await supabase.from("kanji").select("*");
-        if (error) throw error;
-
-        localStorage.setItem("kanjis", JSON.stringify(data));
-        await saveToIndexedDB(data);
-
-        if (isMounted) {
+        // 2️⃣ Shularni darhol set qilamiz (offline holatda ishlashi uchun)
+        if (isMounted && data.length) {
           setKanjis(data);
           setLevels([...new Set(data.map((k) => k.level))]);
+        }
+
+        // 3️⃣ Supabase’dan yangisini olib kelyapmiz
+        const { data: freshData, error } = await supabase
+          .from("kanji")
+          .select("*");
+        if (error) throw error;
+
+        // 4️⃣ Faqat yangilangan ma’lumot bo‘lsa set qilamiz
+        if (isMounted && freshData && freshData.length !== data.length) {
+          setKanjis(freshData);
+          setLevels([...new Set(freshData.map((k) => k.level))]);
+          localStorage.setItem("kanjis", JSON.stringify(freshData));
+          await saveToIndexedDB(freshData);
         }
       } catch (err) {
         console.error("❌ Kanji olishda xato:", err);
@@ -140,7 +145,7 @@ export const KanjiProvider = ({ children }) => {
   };
 
   // ============================
-  // 🔸 Favorites funksiyalari
+  // 🔸 Favorites va Learned funksiyalari
   // ============================
   const toggleFavorite = async (kanjiId) => {
     if (!user) return alert("Avval tizimga kiring!");
@@ -158,9 +163,6 @@ export const KanjiProvider = ({ children }) => {
     }
   };
 
-  // ============================
-  // 🔸 Learned funksiyalari
-  // ============================
   const toggleLearned = async (kanjiId) => {
     if (!user) return alert("Avval tizimga kiring!");
     const userRef = doc(db, "users", user.uid);
@@ -178,7 +180,7 @@ export const KanjiProvider = ({ children }) => {
   };
 
   // ============================
-  // 🔸 Auth holatini kuzatish
+  // 🔸 Auth kuzatuvchi
   // ============================
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -226,12 +228,7 @@ export const KanjiProvider = ({ children }) => {
       const result = await signInWithPopup(auth, googleProvider);
       const userRef = doc(db, "users", result.user.uid);
       const snap = await getDoc(userRef);
-
-      // 🔹 Agar foydalanuvchi hujjati mavjud bo‘lmasa — yangisini yaratamiz
-      if (!snap.exists()) {
-        await setDoc(userRef, { favorites: [], learned: [] });
-      }
-
+      if (!snap.exists()) await setDoc(userRef, { favorites: [], learned: [] });
       await loadUserData(result.user.uid);
       setUser(result.user);
     } catch (err) {
@@ -248,10 +245,9 @@ export const KanjiProvider = ({ children }) => {
     sessionStorage.removeItem("user");
   };
 
-  // 🔹 Dark mode
-  const [darkMode, setDarkMode] = useState(false);
-
-  // 🔹 Dark mode toggle
+  // ============================
+  // 🌙 Dark mode boshqaruvi
+  // ============================
   const toggleTheme = () => {
     setDarkMode((prev) => {
       const newTheme = !prev;
@@ -266,9 +262,6 @@ export const KanjiProvider = ({ children }) => {
     });
   };
 
-  // ============================
-  // 🔹 LocalStorage dan theme olish
-  // ============================
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {

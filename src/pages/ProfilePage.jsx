@@ -28,13 +28,13 @@ const ProfilePage = () => {
 
   return (
     <motion.div
-      className="flex min-h-screen flex-col items-center p-4 text-[#384B70] sm:p-6 md:p-10"
+      className="flex min-h-screen flex-col items-center p-4 sm:p-6 md:p-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
       <motion.div
-        className="flex w-full max-w-md flex-col items-center rounded-3xl border border-[#384B70]/20 bg-[#FCFAEE]/90 p-6 text-center shadow-2xl sm:max-w-lg sm:p-8"
+        className="flex w-full max-w-md flex-col items-center rounded-3xl border-2 border-[#E5E5E0] bg-white p-6 text-center shadow-2xl sm:max-w-lg sm:p-8 dark:border-[#2F3D57] dark:bg-[#263347]"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
@@ -52,13 +52,13 @@ const ProfilePage = () => {
               "https://www.svgrepo.com/show/452030/avatar-default.svg"
             }
             alt={user.displayName || "User"}
-            className="h-28 w-28 rounded-full border-4 border-[#384B70]/60 object-cover shadow-lg transition-transform duration-300 group-hover:scale-105 sm:h-32 sm:w-32"
+            className="h-28 w-28 rounded-full border-4 border-[#384B70] object-cover shadow-lg transition-transform duration-300 group-hover:scale-105 sm:h-32 sm:w-32 dark:border-[#F2C46D]"
           />
         </motion.div>
 
         {/* Ism */}
         <motion.h2
-          className="text-2xl font-bold sm:text-3xl"
+          className="text-2xl font-bold text-[#2E2E2E] sm:text-3xl dark:text-white"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -68,7 +68,7 @@ const ProfilePage = () => {
 
         {/* Email */}
         <motion.p
-          className="mt-2 text-sm break-all sm:text-base"
+          className="mt-2 text-sm break-all text-[#6B6B6B] sm:text-base dark:text-[#BFC8D8]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
@@ -78,31 +78,33 @@ const ProfilePage = () => {
 
         {/* Hisob turi */}
         <motion.p
-          className="mt-1 text-xs italic sm:text-sm"
+          className="mt-1 text-xs text-[#7081A1] italic sm:text-sm dark:text-[#51648F]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
           {user.providerData?.[0]?.providerId === "google.com"
             ? "Google orqali kirilgan"
-            : "Qo‘lda ro‘yxatdan o‘tilgan"}
+            : "Qo'lda ro'yxatdan o'tilgan"}
         </motion.p>
 
-        <div className="my-6 w-full border-t border-[#384B70]/20"></div>
+        <div className="my-6 w-full border-t border-[#E5E5E0] dark:border-[#2F3D57]"></div>
 
         {/* Sevimli kanjilar */}
         <div className="mb-4 w-full text-left">
-          <h3 className="mb-2 text-lg font-semibold"> Sevimli kanjilar</h3>
+          <h3 className="mb-2 flex items-center gap-2 text-lg font-semibold text-[#2E2E2E] dark:text-white">
+            Sevimli kanjilar
+          </h3>
           {favoriteKanjis.length === 0 ? (
-            <p className="text-sm text-[#384B70]/50">
-              Hech qanday sevimli kanji yo‘q.
+            <p className="text-sm text-[#6B6B6B] dark:text-[#BFC8D8]">
+              Hech qanday sevimli kanji yo'q.
             </p>
           ) : (
             <div className="flex flex-wrap gap-2">
               {favoriteKanjis.map((k) => (
                 <motion.div
                   key={k.id}
-                  className="cursor-pointer rounded-full border border-[#384B70]/30 bg-[#384B70]/10 px-3 py-1 text-sm text-[#384B70] transition hover:bg-[#384B70]/30"
+                  className="cursor-pointer rounded-full border-2 border-[#E63946] bg-[#E63946]/10 px-3 py-1 text-sm text-[#E63946] transition hover:bg-[#E63946] hover:text-white dark:border-[#FF6B6B] dark:bg-[#FF6B6B]/10 dark:text-[#FF6B6B] dark:hover:bg-[#FF6B6B] dark:hover:text-[#1E2A3C]"
                   onClick={() => navigate(`/kanji/detail/${k.id}`)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -114,19 +116,21 @@ const ProfilePage = () => {
           )}
         </div>
 
-        {/* O‘rganilgan kanjilar */}
+        {/* O'rganilgan kanjilar */}
         <div className="mb-6 w-full text-left">
-          <h3 className="mb-2 text-lg font-semibold">O‘rganilgan kanjilar</h3>
+          <h3 className="mb-2 flex items-center gap-2 text-lg font-semibold text-[#2E2E2E] dark:text-white">
+            O'rganilgan kanjilar
+          </h3>
           {learnedKanjis.length === 0 ? (
-            <p className="text-sm text-[#384B70]/50">
-              Hech qanday o‘rganilgan kanji yo‘q.
+            <p className="text-sm text-[#6B6B6B] dark:text-[#BFC8D8]">
+              Hech qanday o'rganilgan kanji yo'q.
             </p>
           ) : (
             <div className="flex flex-wrap gap-2">
               {learnedKanjis.map((k) => (
                 <motion.div
                   key={k.id}
-                  className="cursor-pointer rounded-full border border-[#384B70]/30 bg-[#384B70]/10 px-3 py-1 text-sm text-[#384B70] transition hover:bg-[#384B70]/30"
+                  className="cursor-pointer rounded-full border-2 border-[#4CAF50] bg-[#4CAF50]/10 px-3 py-1 text-sm text-[#4CAF50] transition hover:bg-[#4CAF50] hover:text-white dark:border-[#7DCE82] dark:bg-[#7DCE82]/10 dark:text-[#7DCE82] dark:hover:bg-[#7DCE82] dark:hover:text-[#1E2A3C]"
                   onClick={() => navigate(`/kanji/detail/${k.id}`)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -144,7 +148,7 @@ const ProfilePage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/")}
-            className="flex-1 rounded-xl bg-[#384B70] px-5 py-3 text-sm font-semibold text-[#FCFAEE] shadow-md transition hover:bg-[#2f3f62] sm:text-base"
+            className="flex-1 rounded-xl border-2 border-[#384B70] bg-[#384B70] px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:border-[#2E3E5E] hover:bg-[#2E3E5E] sm:text-base dark:border-[#F2C46D] dark:bg-[#F2C46D] dark:text-[#1E2A3C] dark:hover:border-[#E8E4D0] dark:hover:bg-[#E8E4D0]"
           >
             Asosiy sahifaga qaytish
           </motion.button>
@@ -153,7 +157,7 @@ const ProfilePage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleLogout}
-            className="flex-1 rounded-xl border-2 border-[#384B70] px-5 py-3 text-sm font-semibold text-[#384B70] shadow-md transition hover:bg-[#384B70] hover:text-[#FCFAEE] sm:text-base"
+            className="flex-1 rounded-xl border-2 border-[#E5E5E0] bg-white px-5 py-3 text-sm font-semibold text-[#E63946] shadow-md transition hover:border-[#E63946] hover:bg-[#E63946] hover:text-white sm:text-base dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#FF6B6B] dark:hover:border-[#FF6B6B] dark:hover:bg-[#FF6B6B] dark:hover:text-[#1E2A3C]"
           >
             Chiqish
           </motion.button>

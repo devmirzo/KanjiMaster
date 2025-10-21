@@ -14,7 +14,7 @@ const KanjiPage = () => {
   const [kanjisByLevel, setKanjisByLevel] = useState([]);
 
   useEffect(() => {
-    document.title = `Daraja: ${level?.toUpperCase() || "Noma’lum"}`;
+    document.title = `Daraja: ${level?.toUpperCase() || "Noma'lum"}`;
   }, [level]);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const KanjiPage = () => {
 
   if (!kanjisByLevel || kanjisByLevel.length === 0)
     return (
-      <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden  text-[#384B70]">
+      <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -57,7 +57,7 @@ const KanjiPage = () => {
             className="relative flex items-center justify-center"
             style={{ width: "16rem", height: "8rem" }}
           >
-            <BookOpen className="z-10 -mt-40 h-36 w-36 text-[#384B70]" />
+            <BookOpen className="z-10 -mt-40 h-36 w-36 text-[#7081A1] dark:text-[#51648F]" />
 
             {/* Sharpa */}
             <motion.div
@@ -73,7 +73,7 @@ const KanjiPage = () => {
                 ease: "easeInOut",
               }}
             >
-              <Ghost className="z-10 -mt-40 h-16 w-16 text-[#384B70]" />
+              <Ghost className="z-10 -mt-40 h-16 w-16 text-[#7081A1] dark:text-[#51648F]" />
             </motion.div>
           </motion.div>
 
@@ -84,14 +84,14 @@ const KanjiPage = () => {
             transition={{ delay: 0.3 }}
             className="mt-10 max-w-md text-lg leading-relaxed font-medium"
           >
-            <h3 className="-mt-24 mb-1 text-xl font-semibold text-[#384B70]">
-              Oops — hozircha bu darajada kanji yo‘q!
+            <h3 className="-mt-24 mb-1 text-xl font-semibold text-[#2E2E2E] dark:text-white">
+              Oops — hozircha bu darajada kanji yo'q!
             </h3>
-            <p className="max-w-lg text-base leading-relaxed text-[#384B70]/80">
+            <p className="max-w-lg text-base leading-relaxed text-[#6B6B6B] dark:text-[#BFC8D8]">
               Kanjilar hozircha{" "}
               <motion.span
                 whileHover={{ scale: 1.05, rotate: [0, 2, -1, 0] }}
-                className="mx-1 mb-0 inline-block font-medium text-[#384B70]"
+                className="mx-1 mb-0 inline-block font-medium text-[#384B70] dark:text-[#F2C46D]"
               >
                 dam olishmoqda
               </motion.span>
@@ -106,13 +106,11 @@ const KanjiPage = () => {
             <motion.button
               whileHover={{
                 scale: 1.03,
-                backgroundColor: "#384B70",
-                color: "#FCFAEE",
                 boxShadow: "0 0 25px rgba(56,75,112,0.45)",
               }}
               whileTap={{ scale: 0.95 }}
               onClick={() => window.location.reload()}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#384B70] bg-[#FCFAEE] px-6 py-2 text-sm font-semibold text-[#384B70] transition-all sm:text-base"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#E5E5E0] bg-white px-6 py-2 text-sm font-semibold text-[#51648F] transition-all hover:border-[#384B70] hover:bg-[#384B70] hover:text-white sm:text-base dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#F2C46D] dark:hover:border-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
             >
               <RotateCcw className="h-5 w-5" /> Qayta tekshirish
             </motion.button>
@@ -121,25 +119,27 @@ const KanjiPage = () => {
             <motion.button
               whileHover={{
                 scale: 1.03,
-                backgroundColor: "#384B70",
-                color: "#FCFAEE",
               }}
               whileTap={{ scale: 0.93 }}
               onClick={() => navigate(-1)}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#384B70] px-5 py-2.5 text-sm font-semibold text-[#FCFAEE] shadow-md transition-all sm:text-base"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-[#384B70] bg-[#384B70] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:border-[#2E3E5E] hover:bg-[#2E3E5E] sm:text-base dark:border-[#F2C46D] dark:bg-[#F2C46D] dark:text-[#1E2A3C] dark:hover:border-[#E8E4D0] dark:hover:bg-[#E8E4D0]"
             >
               <ArrowLeft className="h-5 w-5" />
               Orqaga qaytish
             </motion.button>
           </div>
         </motion.div>
+
+        {/* Dekorativ elementlar */}
+        <div className="absolute top-32 left-20 h-48 w-48 rounded-full bg-[#7081A1] opacity-[0.03] blur-3xl dark:bg-[#51648F] dark:opacity-[0.05]" />
+        <div className="absolute right-20 bottom-32 h-56 w-56 rounded-full bg-[#384B70] opacity-[0.03] blur-3xl dark:bg-[#F2C46D] dark:opacity-[0.05]" />
       </div>
     );
 
   // Asosiy sahifa
   return (
     <motion.div
-      className="min-h-screen px-4 py-6 text-[#384B70] sm:px-6"
+      className="min-h-screen px-4 py-6 sm:px-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
@@ -147,7 +147,7 @@ const KanjiPage = () => {
       {/* Orqaga tugma */}
       <motion.button
         onClick={() => navigate(-1)}
-        className="mb-6 rounded-lg text-[#384B70] px-4 py-2 font-semibold bg-[#FCFAEE] shadow-sm transition-all hover:opacity-90"
+        className="mb-6 rounded-lg border-2 border-[#E5E5E0] bg-white px-4 py-2 font-semibold text-[#51648F] shadow-sm transition-all hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#F2C46D] dark:hover:border-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -156,21 +156,19 @@ const KanjiPage = () => {
 
       {/* Sarlavha */}
       <motion.h1
-        className="mb-6 text-center text-xl font-bold sm:text-2xl md:text-3xl"
+        className="mb-6 text-center text-xl font-bold text-[#2E2E2E] sm:text-2xl md:text-3xl dark:text-white"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
         Kanji darajasi:{" "}
-        <span className="text-[#384B70]">
-          {level?.toUpperCase() || "Noma’lum"}
+        <span className="text-[#384B70] dark:text-[#F2C46D]">
+          {level?.toUpperCase() || "Noma'lum"}
         </span>
       </motion.h1>
 
       {/* Grid */}
-      <div 
-      className="xs:grid-cols-4 grid grid-cols-3 place-items-center gap-2 sm:grid-cols-4 sm:gap-5 md:gap-7 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9"
-      >
+      <div className="xs:grid-cols-4 grid grid-cols-3 place-items-center gap-2 sm:grid-cols-4 sm:gap-5 md:gap-7 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9">
         {kanjisByLevel.map((k) => (
           <FadeInOnScroll key={k.id}>
             <KanjiCard

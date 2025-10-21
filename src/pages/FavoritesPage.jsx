@@ -35,11 +35,11 @@ const FavoritesPage = () => {
   };
 
   return (
-    <div className="min-h-screen p-6 text-[#384B70]">
+    <div className="min-h-screen p-6">
       {favoriteKanjis.length > 0 && (
         <motion.button
           onClick={() => navigate(-1)}
-          className="mb-6 flex items-center gap-2 rounded-xl bg-[#384B70] px-4 py-2 font-semibold text-[#FCFAEE] transition hover:bg-[#2C3E5D]"
+          className="mb-6 flex items-center gap-2 rounded-xl border-2 border-[#384B70] bg-[#384B70] px-4 py-2 font-semibold text-white transition hover:border-[#2E3E5E] hover:bg-[#2E3E5E] dark:border-[#F2C46D] dark:bg-[#F2C46D] dark:text-[#1E2A3C] dark:hover:border-[#E8E4D0] dark:hover:bg-[#E8E4D0]"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -52,7 +52,7 @@ const FavoritesPage = () => {
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="h-36 w-24 animate-pulse rounded-2xl bg-[#384B70]/20 sm:h-40 sm:w-28 md:h-44 md:w-32 lg:h-48 lg:w-36"
+              className="h-36 w-24 animate-pulse rounded-2xl border-2 border-[#E5E5E0] bg-[#7081A1]/10 sm:h-40 sm:w-28 md:h-44 md:w-32 lg:h-48 lg:w-36 dark:border-[#2F3D57] dark:bg-[#51648F]/10"
             />
           ))}
         </div>
@@ -80,7 +80,7 @@ const FavoritesPage = () => {
               animate={{ y: [0, -6, 0], rotate: [0, 2, -2, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Heart className="h-36 w-36 text-[#384B70]" />
+              <Heart className="h-36 w-36 text-[#E63946] dark:text-[#FF6B6B]" />
               <motion.div
                 className="absolute top-1/2 left-1/2"
                 style={{ translateX: "-50%", translateY: "-50%" }}
@@ -95,26 +95,28 @@ const FavoritesPage = () => {
                   ease: "easeInOut",
                 }}
               >
-                <Search className="h-16 w-16 text-[#384B70]" />
+                <Search className="h-16 w-16 text-[#51648F] dark:text-[#F2C46D]" />
               </motion.div>
             </motion.div>
           </div>
 
-          <p className="mt-3 text-lg">
-            Hozircha sevimli kanjilar yo‘q! <br />
-            Kanjilar bilan tanishing – yuragingizni to‘ldiring!
+          <p className="mt-3 text-lg text-[#2E2E2E] dark:text-white">
+            Hozircha sevimli kanjilar yo'q! <br />
+            <span className="text-[#6B6B6B] dark:text-[#BFC8D8]">
+              Kanjilar bilan tanishing – yuragingizni to'ldiring!
+            </span>
           </p>
 
-          <div className="mt-4 flex justify-center gap-4">
+          <div className="mt-6 flex justify-center gap-4">
             <button
               onClick={() => navigate(-1)}
-              className="rounded-xl bg-[#384B70] px-6 py-2 text-sm font-semibold text-[#FCFAEE] hover:bg-[#2C3E5D]"
+              className="rounded-xl border-2 border-[#E5E5E0] bg-white px-6 py-2 text-sm font-semibold text-[#51648F] transition hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#F2C46D] dark:hover:border-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
             >
               Orqaga
             </button>
             <button
               onClick={() => navigate("/")}
-              className="rounded-lg bg-[#384B70] px-5 py-2.5 text-sm font-semibold text-[#FCFAEE] hover:bg-[#2C3E5D]"
+              className="rounded-xl border-2 border-[#384B70] bg-[#384B70] px-6 py-2 text-sm font-semibold text-white transition hover:border-[#2E3E5E] hover:bg-[#2E3E5E] dark:border-[#F2C46D] dark:bg-[#F2C46D] dark:text-[#1E2A3C] dark:hover:border-[#E8E4D0] dark:hover:bg-[#E8E4D0]"
             >
               Bosh sahifaga
             </button>

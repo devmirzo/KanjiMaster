@@ -4,14 +4,18 @@ import { useKanjis } from "../context/KanjiContext";
 import { motion, AnimatePresence } from "framer-motion";
 import LearnedCard from "../components/LearnedCard";
 import { BookOpen, Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const LearnedPage = () => {
   const { learned, kanjis, loading } = useKanjis();
   const [learnedKanjis, setLearnedKanjis] = useState([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-     document.title = "O'rganilganlar | KanjiMaster";
-   }, []);
+    document.title = "O'rganilganlar | KanjiMaster";
+  }, []);
+
   useEffect(() => {
     if (kanjis.length) {
       setLearnedKanjis(kanjis.filter((k) => learned.includes(k.id)));
@@ -19,13 +23,13 @@ const LearnedPage = () => {
   }, [kanjis, learned]);
 
   return (
-    <div className="min-h-screen p-6 text-[#384B70]">
+    <div className="min-h-screen p-6">
       {loading ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="h-36 w-24 animate-pulse rounded-2xl bg-[#384B70]/20 sm:h-40 sm:w-28 md:h-44 md:w-32 lg:h-48 lg:w-36"
+              className="h-36 w-24 animate-pulse rounded-2xl border-2 border-[#E5E5E0] bg-[#4CAF50]/10 sm:h-40 sm:w-28 md:h-44 md:w-32 lg:h-48 lg:w-36 dark:border-[#2F3D57] dark:bg-[#7DCE82]/10"
             />
           ))}
         </div>
@@ -60,7 +64,7 @@ const LearnedPage = () => {
                 ease: "easeInOut",
               }}
             >
-              <BookOpen className="h-36 w-36 text-[#384B70]" />
+              <BookOpen className="h-36 w-36 text-[#4CAF50] dark:text-[#7DCE82]" />
               <motion.div
                 className="absolute top-1/2 left-1/2"
                 style={{ translateX: "-50%", translateY: "-50%" }}
@@ -75,26 +79,28 @@ const LearnedPage = () => {
                   ease: "easeInOut",
                 }}
               >
-                <Search className="h-16 w-16 text-[#384B70]" />
+                <Search className="h-16 w-16 text-[#51648F] dark:text-[#F2C46D]" />
               </motion.div>
             </motion.div>
           </div>
 
-          <p className="mt-3 text-lg">
-            Hozircha o‘rganilgan kanjilar yo‘q! <br />
-            Kanjilar bilan tanishing va bilimlaringizni oshiring!
+          <p className="mt-3 text-lg text-[#2E2E2E] dark:text-white">
+            Hozircha o'rganilgan kanjilar yo'q! <br />
+            <span className="text-[#6B6B6B] dark:text-[#BFC8D8]">
+              Kanjilar bilan tanishing va bilimlaringizni oshiring!
+            </span>
           </p>
 
-          <div className="mt-4 flex justify-center gap-4">
+          <div className="mt-6 flex justify-center gap-4">
             <button
-              onClick={() => window.history.back()}
-              className="rounded-xl bg-[#384B70] px-6 py-2 text-sm font-semibold text-[#FCFAEE] hover:bg-[#2C3E5D]"
+              onClick={() => navigate(-1)}
+              className="rounded-xl border-2 border-[#E5E5E0] bg-white px-6 py-2 text-sm font-semibold text-[#51648F] transition hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#6bc76e] dark:hover:border-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
             >
               Orqaga
             </button>
             <button
-              onClick={() => (window.location.href = "/")}
-              className="rounded-lg bg-[#384B70] px-5 py-2.5 text-sm font-semibold text-[#FCFAEE] hover:bg-[#2C3E5D]"
+              onClick={() => navigate("/")}
+              className="rounded-xl border-2 border-[#4CAF50] bg-[#4CAF50] px-6 py-2 text-sm font-semibold text-white transition hover:border-[#45a049] hover:bg-[#45a049] dark:border-[#7DCE82] dark:bg-[#7DCE82] dark:text-[#1E2A3C] dark:hover:border-[#6bc76e] dark:hover:bg-[#6bc76e]"
             >
               Bosh sahifaga
             </button>

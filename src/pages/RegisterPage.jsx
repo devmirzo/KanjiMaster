@@ -77,128 +77,157 @@ const RegisterPage = () => {
 
   return (
     <motion.div
-      className="flex min-h-screen items-center justify-center "
+      className="flex min-h-screen items-center justify-center px-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
     >
       <motion.div
-        className="w-full max-w-md rounded-3xl bg-[#FCFAEE] p-10 shadow-2xl"
+        className="w-full max-w-md rounded-3xl border-2 border-[#E5E5E0] bg-white p-10 shadow-2xl dark:border-[#2F3D57] dark:bg-[#263347]"
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <motion.h1
-          className="mb-6 text-center text-3xl font-bold text-[#384B70]"
+          className="mb-6 text-center text-3xl font-bold text-[#384B70] dark:text-[#FCFAEE]"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.2 }}
         >
-          Ro‘yxatdan o‘tish
+          Ro'yxatdan o'tish
         </motion.h1>
 
         <motion.form
           onSubmit={handleRegister}
-          className="space-y-5"
+          className="space-y-4"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.3 }}
         >
           <div>
-            <label className="block font-semibold text-[#384B70]">Ism</label>
+            <label className="mb-1 block font-semibold text-[#2E2E2E] dark:text-white">
+              Ism
+            </label>
             <motion.input
+              whileFocus={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
               type="text"
               placeholder="Humoyun Mirzo"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
+              className="w-full rounded-xl border-2 border-[#E5E5E0] bg-[#FCFAEE] p-3 text-[#2E2E2E] placeholder-[#6B6B6B] transition outline-none focus:border-[#384B70] focus:ring-2 focus:ring-[#384B70]/20 dark:border-[#2F3D57] dark:bg-[#1E2A3C] dark:text-white dark:placeholder-[#BFC8D8] dark:focus:border-[#F2C46D] dark:focus:ring-[#F2C46D]/20"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-[#384B70]">Email</label>
+            <label className="mb-1 block font-semibold text-[#2E2E2E] dark:text-white">
+              Email
+            </label>
             <motion.input
+              whileFocus={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
               type="email"
               placeholder="example@mail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
+              className="w-full rounded-xl border-2 border-[#E5E5E0] bg-[#FCFAEE] p-3 text-[#2E2E2E] placeholder-[#6B6B6B] transition outline-none focus:border-[#384B70] focus:ring-2 focus:ring-[#384B70]/20 dark:border-[#2F3D57] dark:bg-[#1E2A3C] dark:text-white dark:placeholder-[#BFC8D8] dark:focus:border-[#F2C46D] dark:focus:ring-[#F2C46D]/20"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-[#384B70]">Parol</label>
+            <label className="mb-1 block font-semibold text-[#2E2E2E] dark:text-white">
+              Parol
+            </label>
             <motion.input
+              whileFocus={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
               type="password"
               placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
+              className="w-full rounded-xl border-2 border-[#E5E5E0] bg-[#FCFAEE] p-3 text-[#2E2E2E] placeholder-[#6B6B6B] transition outline-none focus:border-[#384B70] focus:ring-2 focus:ring-[#384B70]/20 dark:border-[#2F3D57] dark:bg-[#1E2A3C] dark:text-white dark:placeholder-[#BFC8D8] dark:focus:border-[#F2C46D] dark:focus:ring-[#F2C46D]/20"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-[#384B70]">
+            <label className="mb-1 block font-semibold text-[#2E2E2E] dark:text-white">
               Parolni tasdiqlang
             </label>
             <motion.input
+              whileFocus={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
               type="password"
               placeholder="********"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full rounded-xl border border-[#384B70]/30 p-2 outline-none focus:ring-2 focus:ring-[#384B70]"
+              className="w-full rounded-xl border-2 border-[#E5E5E0] bg-[#FCFAEE] p-3 text-[#2E2E2E] placeholder-[#6B6B6B] transition outline-none focus:border-[#384B70] focus:ring-2 focus:ring-[#384B70]/20 dark:border-[#2F3D57] dark:bg-[#1E2A3C] dark:text-white dark:placeholder-[#BFC8D8] dark:focus:border-[#F2C46D] dark:focus:ring-[#F2C46D]/20"
             />
           </div>
 
           <motion.button
             type="submit"
             disabled={loading}
-            whileHover={!loading ? { scale: 1.05 } : {}}
-            whileTap={!loading ? { scale: 0.95 } : {}}
-            className={`w-full rounded-xl py-2 font-semibold transition ${
+            whileHover={{ scale: loading ? 1 : 1.05 }}
+            whileTap={{ scale: loading ? 1 : 0.95 }}
+            transition={{ type: "spring", stiffness: 250 }}
+            className={`w-full rounded-xl border-2 py-3 font-semibold transition ${
               loading
-                ? "cursor-not-allowed bg-[#7b8bb4] text-[#FCFAEE]"
-                : "bg-[#384B70] text-[#FCFAEE] hover:bg-[#2d3c5c]"
+                ? "cursor-not-allowed border-[#7081A1]/50 bg-[#7081A1]/50 text-white dark:border-[#51648F]/50 dark:bg-[#51648F]/50"
+                : "border-[#384B70] bg-[#384B70] text-white hover:border-[#2E3E5E] hover:bg-[#2E3E5E] dark:border-[#F2C46D] dark:bg-[#F2C46D] dark:text-[#1E2A3C] dark:hover:border-[#E8E4D0] dark:hover:bg-[#E8E4D0]"
             }`}
           >
-            {loading ? "⏳ Kutilmoqda..." : "Ro‘yxatdan o‘tish"}
+            {loading ? "⏳ Kutilmoqda..." : "Ro'yxatdan o'tish"}
           </motion.button>
         </motion.form>
 
-        <div className="my-3 flex items-center">
-          <div className="flex-grow border-t border-[#384B70]/30"></div>
-          <span className="mx-5 text-sm text-[#384B70]/70">yoki</span>
-          <div className="flex-grow border-t border-[#384B70]/30"></div>
-        </div>
+        <motion.div
+          className="my-6 flex items-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          <div className="flex-grow border-t border-[#E5E5E0] dark:border-[#2F3D57]"></div>
+          <span className="mx-3 text-sm text-[#6B6B6B] dark:text-[#BFC8D8]">
+            yoki
+          </span>
+          <div className="flex-grow border-t border-[#E5E5E0] dark:border-[#2F3D57]"></div>
+        </motion.div>
 
         <motion.button
           onClick={handleGoogleLogin}
           disabled={loading}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex w-full items-center justify-center rounded-xl border border-[#384B70] py-2 font-semibold text-[#384B70] transition hover:bg-[#384B70] hover:text-[#FCFAEE]"
+          whileHover={{ scale: loading ? 1 : 1.05 }}
+          whileTap={{ scale: loading ? 1 : 0.95 }}
+          transition={{ type: "spring", stiffness: 250 }}
+          className="flex w-full items-center justify-center rounded-xl border-2 border-[#E5E5E0] bg-white py-3 font-semibold text-[#51648F] transition hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#F2C46D] dark:hover:border-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
         >
-          <img
+          <motion.img
             src="https://www.svgrepo.com/show/475656/google-color.svg"
             alt="Google"
             className="mr-2 h-6 w-6"
+            whileHover={{ rotate: 10 }}
           />
           Google orqali kirish
         </motion.button>
 
-        <p className="mt-6 text-center text-sm text-[#384B70]/80">
+        <motion.p
+          className="mt-6 text-center text-sm text-[#6B6B6B] dark:text-[#BFC8D8]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
           Hisobingiz bormi?{" "}
           <Link
             to="/login"
-            className="font-semibold text-[#384B70] underline hover:text-[#2d3c5c]"
+            className="font-semibold text-[#51648F] underline transition hover:text-[#2E3E5E] dark:text-[#F2C46D] dark:hover:text-[#E8E4D0]"
           >
             Kirish
           </Link>
-        </p>
+        </motion.p>
       </motion.div>
     </motion.div>
   );
