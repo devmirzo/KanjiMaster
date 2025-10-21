@@ -70,13 +70,13 @@ const Navbar = () => {
                     <span className="text-sm font-semibold text-[#2E2E2E] dark:text-white">
                       {user.displayName || "Foydalanuvchi"}
                     </span>
-                    <button
+                    {/* <button
                       onClick={toggleDarkMode}
                       className="flex items-center justify-center rounded-full p-1.5 text-[#384B70] transition-all duration-200 hover:bg-[#384B70] hover:text-white dark:text-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
                       title={darkMode ? "Light Mode" : "Dark Mode"}
                     >
                       {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-                    </button>
+                    </button> */}
                   </div>
 
                   {/* Menyu elementlari */}
