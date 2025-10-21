@@ -25,7 +25,18 @@ const KanjiCard = ({ id, kanji }) => {
       <div className="absolute right-0 bottom-0 left-0 h-1 bg-[#7081A1]/30 transition-all duration-300 group-hover:h-1.5 group-hover:bg-[#384B70] dark:bg-[#51648F]/30 dark:group-hover:bg-[#F2C46D]"></div>
 
       {/* 🔹 Yuqori burchak dekorativ element */}
-      <div className="absolute top-0 right-0 h-8 w-8 rounded-bl-2xl bg-[#F2C46D]/10 opacity-0 transition-all duration-300 group-hover:opacity-100 dark:bg-[#F2C46D]/20"></div>
+      {/* 🔹 Yuqori burchakdagi ID belgisi (premium badge) */}
+      <div className="absolute top-2 right-2">
+        <div className="relative flex items-center justify-center">
+          {/* Fon halosi */}
+          <span className="absolute inset-0 scale-0 rounded-full bg-[#F2C46D]/20 opacity-0 blur-md transition-all duration-500 group-hover:scale-125 group-hover:opacity-100 dark:bg-[#F2C46D]/30"></span>
+
+          {/* Asosiy badge */}
+          <span className="relative z-10 flex h-7 w-7 items-center justify-center rounded-lg bg-white/60 text-xs font-semibold text-[#384B70] shadow-sm ring-1 ring-[#384B70]/10 backdrop-blur-md transition-all duration-500 group-hover:scale-110 group-hover:bg-[#384B70] group-hover:text-[#FCFAEE] dark:bg-[#F2C46D]/15 dark:text-[#F2C46D] dark:ring-[#F2C46D]/20 dark:group-hover:bg-[#F2C46D] dark:group-hover:text-[#263347]">
+            {id}
+          </span>
+        </div>
+      </div>
     </div>
   );
 };

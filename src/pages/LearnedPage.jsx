@@ -94,7 +94,7 @@ const LearnedPage = () => {
           <div className="mt-6 flex justify-center gap-4">
             <button
               onClick={() => navigate(-1)}
-              className="rounded-xl border-2 border-[#E5E5E0] bg-white px-6 py-2 text-sm font-semibold text-[#51648F] transition hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#6bc76e] dark:hover:border-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
+              className="dark:hover:border-bg-[#6bc76e] rounded-xl border-2 border-[#E5E5E0] bg-white px-6 py-2 text-sm font-semibold text-[#51648F] transition hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#6bc76e] dark:hover:bg-[#6bc76e] dark:hover:text-[#1E2A3C]"
             >
               Orqaga
             </button>

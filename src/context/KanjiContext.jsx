@@ -252,11 +252,11 @@ export const KanjiProvider = ({ children }) => {
     setDarkMode((prev) => {
       const newTheme = !prev;
       if (newTheme) {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.add("light");
         localStorage.setItem("theme", "light");
+      } else {
+        document.documentElement.classList.remove("light");
+        localStorage.setItem("theme", "dark");
       }
       return newTheme;
     });
