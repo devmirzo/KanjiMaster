@@ -34,7 +34,7 @@ const LearnedPage = () => {
           ))}
         </div>
       ) : learnedKanjis.length > 0 ? (
-        <motion.div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+        <motion.div className="xs:grid-cols-4 grid grid-cols-3 place-items-center gap-2 sm:grid-cols-4 sm:gap-5 md:gap-7 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9">
           <AnimatePresence>
             {learnedKanjis.map((kanji) => (
               <motion.div
