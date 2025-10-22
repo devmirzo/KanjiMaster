@@ -46,7 +46,14 @@ const FavoritesPage = () => {
           <ArrowLeft size={18} /> Orqaga
         </motion.button>
       )}
-
+      <motion.h1
+        className="mb-6 text-center text-xl font-bold text-[#2E2E2E] sm:text-2xl md:text-3xl dark:text-white"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        Sevimli kanjilar
+      </motion.h1>
       {loading ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
           {[...Array(8)].map((_, i) => (

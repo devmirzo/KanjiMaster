@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useKanjis } from "../context/KanjiContext";
 import { motion, AnimatePresence } from "framer-motion";
 import LearnedCard from "../components/LearnedCard";
-import { BookOpen, Search } from "lucide-react";
+import { ArrowLeft, BookOpen, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const LearnedPage = () => {
@@ -34,22 +34,46 @@ const LearnedPage = () => {
           ))}
         </div>
       ) : learnedKanjis.length > 0 ? (
-        <motion.div className="xs:grid-cols-4 grid grid-cols-3 place-items-center gap-2 sm:grid-cols-4 sm:gap-5 md:gap-7 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9">
-          <AnimatePresence>
-            {learnedKanjis.map((kanji) => (
-              <motion.div
-                key={kanji.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ type: "spring", stiffness: 100, damping: 10 }}
-              >
-                <LearnedCard kanji={kanji} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <>
+          {/* dark:hover:border-bg-[#6bc76e] rounded-xl border-2 border-[#E5E5E0]
+          bg-white px-6 py-2 text-sm font-semibold text-[#51648F] transition
+          hover:border-[#384B70] hover:bg-[#384B70] hover:text-white
+          dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#6bc76e]
+          dark:hover:bg-[#6bc76e] dark:hover:text-[#1E2A3C] */}
+          <motion.button
+            onClick={() => navigate(-1)}
+            className="text-51648F mb-6 flex items-center gap-2 rounded-xl border-2 border-[#384B70] bg-[#384B70] px-4 py-2 font-semibold transition hover:border-[#2E3E5E] hover:bg-[#2E3E5E] dark:border-[#6bc76e] dark:bg-[#6bc76e] dark:text-[#1E2A3C] dark:hover:border-[#E8E4D0] dark:hover:bg-[#E8E4D0]"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <ArrowLeft size={18} /> Orqaga
+          </motion.button>
+
+          <motion.h1
+            className="mb-6 text-center text-xl font-bold text-[#2E2E2E] sm:text-2xl md:text-3xl dark:text-white"
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            O'rganilgan kanjilar
+          </motion.h1>
+          <motion.div className="xs:grid-cols-4 grid grid-cols-3 place-items-center gap-2 sm:grid-cols-4 sm:gap-5 md:gap-7 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9">
+            <AnimatePresence>
+              {learnedKanjis.map((kanji) => (
+                <motion.div
+                  key={kanji.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ type: "spring", stiffness: 100, damping: 10 }}
+                >
+                  <LearnedCard kanji={kanji} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        </>
       ) : (
         <div className="mt-20 text-center">
           <div className="relative mb-4 flex items-center justify-center">
