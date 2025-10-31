@@ -55,16 +55,22 @@ const KanjiDetailPage = () => {
 
   const kanji = useMemo(
     () => kanjis.find((k) => String(k.id) === String(id)),
-    [kanjis, id]
+    [kanjis, id],
   );
 
   const currentIndex = useMemo(
     () => kanjis.findIndex((k) => String(k.id) === String(id)),
-    [kanjis, id]
+    [kanjis, id],
   );
 
-  const prevKanji = useMemo(() => kanjis[currentIndex - 1], [kanjis, currentIndex]);
-  const nextKanji = useMemo(() => kanjis[currentIndex + 1], [kanjis, currentIndex]);
+  const prevKanji = useMemo(
+    () => kanjis[currentIndex - 1],
+    [kanjis, currentIndex],
+  );
+  const nextKanji = useMemo(
+    () => kanjis[currentIndex + 1],
+    [kanjis, currentIndex],
+  );
 
   useEffect(() => {
     document.title = kanji?.kanji_text
@@ -80,10 +86,19 @@ const KanjiDetailPage = () => {
   if (!kanji)
     return <Error message="Kanji topilmadi." onRetry={() => navigate(-1)} />;
 
-  const isFavorite = useMemo(() => !!kanji && favorites.includes(kanji.id), [favorites, kanji]);
-  const isLearned = useMemo(() => !!kanji && learned.includes(kanji.id), [learned, kanji]);
+  const isFavorite = useMemo(
+    () => !!kanji && favorites.includes(kanji.id),
+    [favorites, kanji],
+  );
+  const isLearned = useMemo(
+    () => !!kanji && learned.includes(kanji.id),
+    [learned, kanji],
+  );
 
-  const examples = useMemo(() => safeParseExamples(kanji?.examples), [kanji?.examples]);
+  const examples = useMemo(
+    () => safeParseExamples(kanji?.examples),
+    [kanji?.examples],
+  );
 
   const pageVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -168,7 +183,7 @@ const KanjiDetailPage = () => {
             <h2 className="mb-3 text-xl font-semibold text-[#2E2E2E] dark:text-white">
               Yozilish tartibi
             </h2>
-            <div className="flex flex-wrap justify-center py-8 gap-3 rounded-2xl bg-white">
+            <div className="flex flex-wrap justify-center gap-3 rounded-2xl bg-white py-8">
               {kanji.stroke_video && (
                 <video
                   src={kanji.stroke_video}
