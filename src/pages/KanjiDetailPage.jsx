@@ -134,7 +134,7 @@ const KanjiDetailPage = () => {
             <h2 className="mb-3 text-xl font-semibold text-[#2E2E2E] dark:text-white">
               Yozilish tartibi
             </h2>
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap justify-center py-8 gap-3 rounded-2xl bg-white">
               {kanji.stroke_video && (
                 <video
                   src={kanji.stroke_video}
