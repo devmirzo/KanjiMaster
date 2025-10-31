@@ -1,5 +1,5 @@
 // src/pages/LearnedPage.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useKanjis } from "../context/KanjiContext";
 import { motion, AnimatePresence } from "framer-motion";
 import LearnedCard from "../components/LearnedCard";
@@ -8,23 +8,25 @@ import { useNavigate } from "react-router-dom";
 
 const LearnedPage = () => {
   const { learned, kanjis, loading } = useKanjis();
-  const [learnedKanjis, setLearnedKanjis] = useState([]);
-
   const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "O'rganilganlar | KanjiMaster";
   }, []);
 
-  useEffect(() => {
-    if (kanjis.length) {
-      setLearnedKanjis(kanjis.filter((k) => learned.includes(k.id)));
-    }
+  const learnedKanjis = useMemo(() => {
+    return kanjis.filter((k) => learned.includes(k.id));
   }, [kanjis, learned]);
 
   return (
-    <div className="min-h-screen p-6">
+    <motion.div
+      className="min-h-screen p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+    >
       {loading ? (
+        // === Skeleton Loader ===
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
           {[...Array(8)].map((_, i) => (
             <div
@@ -35,29 +37,34 @@ const LearnedPage = () => {
         </div>
       ) : learnedKanjis.length > 0 ? (
         <>
-          {/* dark:hover:border-bg-[#6bc76e] rounded-xl border-2 border-[#E5E5E0]
-          bg-white px-6 py-2 text-sm font-semibold text-[#51648F] transition
-          hover:border-[#384B70] hover:bg-[#384B70] hover:text-white
-          dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#6bc76e]
-          dark:hover:bg-[#6bc76e] dark:hover:text-[#1E2A3C] */}
+          {/* === Back Button === */}
           <motion.button
-            onClick={() => navigate(-1)}
-            className="text-51648F mb-6 flex items-center gap-2 rounded-xl border-2 border-[#384B70] bg-[#384B70] px-4 py-2 font-semibold transition hover:border-[#2E3E5E] hover:bg-[#2E3E5E] dark:border-[#6bc76e] dark:bg-[#6bc76e] dark:text-[#1E2A3C] dark:hover:border-[#E8E4D0] dark:hover:bg-[#E8E4D0]"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <ArrowLeft size={18} /> Orqaga
-          </motion.button>
+                  onClick={() => navigate(-1)}
+                  aria-label="Orqaga qaytish"
+                  className="mb-6 rounded-lg border-2 border-[#E5E5E0] bg-white px-4 py-2 font-semibold text-[#51648F] shadow-sm hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#F2C46D]"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  ← Orqaga
+                </motion.button>
 
-          <motion.h1
-            className="mb-6 text-center text-xl font-bold text-[#2E2E2E] sm:text-2xl md:text-3xl dark:text-white"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
+          {/* === Page Title === */}
+          <header>
+            <motion.h1
+              className="mb-6 text-center text-2xl font-bold text-[#2E2E2E] sm:text-3xl dark:text-white"
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+            >
+              O'rganilgan kanjilar
+            </motion.h1>
+          </header>
+
+          {/* === Learned Kanji Grid === */}
+          <motion.div
+            layout
+            className="grid grid-cols-3 place-items-center gap-3 sm:grid-cols-4 sm:gap-5 md:gap-6 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9"
           >
-            O'rganilgan kanjilar
-          </motion.h1>
-          <motion.div className="xs:grid-cols-4 grid grid-cols-3 place-items-center gap-2 sm:grid-cols-4 sm:gap-5 md:gap-7 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9">
             <AnimatePresence>
               {learnedKanjis.map((kanji) => (
                 <motion.div
@@ -66,7 +73,11 @@ const LearnedPage = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ type: "spring", stiffness: 100, damping: 10 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 14,
+                  }}
                 >
                   <LearnedCard kanji={kanji} />
                 </motion.div>
@@ -75,38 +86,30 @@ const LearnedPage = () => {
           </motion.div>
         </>
       ) : (
-        <div className="mt-20 text-center">
-          <div className="relative mb-4 flex items-center justify-center">
+        // === Empty State ===
+        <div
+          className="mt-20 flex flex-col items-center text-center"
+          aria-label="No learned kanji message"
+        >
+          <motion.div
+            className="relative mb-6"
+            animate={{ y: [0, -6, 0], rotate: [0, 2, -2, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <BookOpen className="h-36 w-36 text-[#4CAF50] dark:text-[#7DCE82]" />
             <motion.div
+              className="absolute top-1/2 left-1/2"
+              style={{ translateX: "-50%", translateY: "-50%" }}
               animate={{
-                y: [0, -6, 0],
-                rotate: [0, 2, -2, 0],
+                x: [0, 15, -15, 10, -10, 0],
+                y: [0, -10, 10, -15, 5, 0],
+                rotate: [0, 15, -10, 10, -5, 0],
               }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             >
-              <BookOpen className="h-36 w-36 text-[#4CAF50] dark:text-[#7DCE82]" />
-              <motion.div
-                className="absolute top-1/2 left-1/2"
-                style={{ translateX: "-50%", translateY: "-50%" }}
-                animate={{
-                  x: [0, 15, -15, 10, -10, 0],
-                  y: [0, -10, 10, -15, 5, 0],
-                  rotate: [0, 15, -10, 10, -5, 0],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <Search className="h-16 w-16 text-[#51648F] dark:text-[#F2C46D]" />
-              </motion.div>
+              <Search className="h-16 w-16 text-[#51648F] dark:text-[#F2C46D]" />
             </motion.div>
-          </div>
+          </motion.div>
 
           <p className="mt-3 text-lg text-[#2E2E2E] dark:text-white">
             Hozircha o'rganilgan kanjilar yo'q! <br />
@@ -115,10 +118,10 @@ const LearnedPage = () => {
             </span>
           </p>
 
-          <div className="mt-6 flex justify-center gap-4">
+          <div className="mt-6 flex flex-wrap justify-center gap-4">
             <button
               onClick={() => navigate(-1)}
-              className="dark:hover:border-bg-[#6bc76e] rounded-xl border-2 border-[#E5E5E0] bg-white px-6 py-2 text-sm font-semibold text-[#51648F] transition hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#6bc76e] dark:hover:bg-[#6bc76e] dark:hover:text-[#1E2A3C]"
+              className="rounded-xl border-2 border-[#E5E5E0] bg-white px-6 py-2 text-sm font-semibold text-[#51648F] transition hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#6bc76e] dark:hover:bg-[#6bc76e] dark:hover:text-[#1E2A3C]"
             >
               Orqaga
             </button>
@@ -131,7 +134,7 @@ const LearnedPage = () => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

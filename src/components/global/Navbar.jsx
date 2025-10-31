@@ -1,23 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useKanjis } from "../../context/KanjiContext";
-import {
-  Menu,
-  X,
-  LogOut,
-  User,
-  Heart,
-  BookOpen,
-  Sun,
-  Moon,
-} from "lucide-react";
+import { LogOut, User, Heart, BookOpen, Sun, Moon } from "lucide-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user, logout } = useKanjis();
-
+  const { user, logout, darkMode, toggleTheme } = useKanjis(); // 🔹 Context'dan darkMode va toggleTheme olindi
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -29,12 +18,6 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  // Dark mode toggle handler
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
-    document.documentElement.classList.toggle("dark", !darkMode);
-  };
 
   return (
     <nav className="sticky top-0 z-50 border-b border-[#E5E5E0] bg-[#FCFAEE] shadow-md transition-all duration-300 dark:border-[#2F3D57] dark:bg-[#1E2A3C]">
@@ -70,13 +53,13 @@ const Navbar = () => {
                     <span className="text-sm font-semibold text-[#2E2E2E] dark:text-white">
                       {user.displayName || "Foydalanuvchi"}
                     </span>
-                    {/* <button
-                      onClick={toggleDarkMode}
+                    <button
+                      onClick={toggleTheme}
                       className="flex items-center justify-center rounded-full p-1.5 text-[#384B70] transition-all duration-200 hover:bg-[#384B70] hover:text-white dark:text-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
                       title={darkMode ? "Light Mode" : "Dark Mode"}
                     >
                       {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-                    </button> */}
+                    </button>
                   </div>
 
                   {/* Menyu elementlari */}
@@ -87,7 +70,7 @@ const Navbar = () => {
                       path: "/profile",
                     },
                     {
-                      label: "O'rganilgan",
+                      label: "O‘rganilgan",
                       icon: <BookOpen size={18} />,
                       path: "/learned",
                     },

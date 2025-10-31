@@ -1,3 +1,4 @@
+// 📂 src/context/KanjiContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { auth, googleProvider, db } from "../firebase";
@@ -18,10 +19,18 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 
-export const KanjiContext = createContext();
+// ============================
+// 🔸 Context yaratish
+// ============================
+const KanjiContext = createContext();
 
+// Custom hook (useKanjis)
+export const useKanjis = () => useContext(KanjiContext);
+
+// ============================
+// 🔸 Provider komponenti
+// ============================
 export const KanjiProvider = ({ children }) => {
-  // 🔹 States
   const [kanjis, setKanjis] = useState([]);
   const [levels, setLevels] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -76,14 +85,13 @@ export const KanjiProvider = ({ children }) => {
   };
 
   // ============================
-  // 🔸 Supabase’dan Kanji olish (OPTIMIZED)
+  // 🔸 Supabase’dan Kanji olish
   // ============================
   useEffect(() => {
     let isMounted = true;
     const fetchKanjis = async () => {
       try {
         setLoading(true);
-        // 1️⃣ Avval localStorage yoki IndexedDB dan o‘qiymiz
         let data = [];
         const cached = localStorage.getItem("kanjis");
         if (cached) data = JSON.parse(cached);
@@ -92,19 +100,16 @@ export const KanjiProvider = ({ children }) => {
           if (indexed.length) data = indexed;
         }
 
-        // 2️⃣ Shularni darhol set qilamiz (offline holatda ishlashi uchun)
         if (isMounted && data.length) {
           setKanjis(data);
           setLevels([...new Set(data.map((k) => k.level))]);
         }
 
-        // 3️⃣ Supabase’dan yangisini olib kelyapmiz
         const { data: freshData, error } = await supabase
           .from("kanji")
           .select("*");
         if (error) throw error;
 
-        // 4️⃣ Faqat yangilangan ma’lumot bo‘lsa set qilamiz
         if (isMounted && freshData && freshData.length !== data.length) {
           setKanjis(freshData);
           setLevels([...new Set(freshData.map((k) => k.level))]);
@@ -186,21 +191,11 @@ export const KanjiProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        sessionStorage.setItem(
-          "user",
-          JSON.stringify({
-            uid: currentUser.uid,
-            name: currentUser.displayName,
-            email: currentUser.email,
-            photo: currentUser.photoURL,
-          }),
-        );
         await loadUserData(currentUser.uid);
       } else {
         setUser(null);
         setFavorites([]);
         setLearned([]);
-        sessionStorage.removeItem("user");
       }
       setAuthLoading(false);
     });
@@ -224,17 +219,12 @@ export const KanjiProvider = ({ children }) => {
     signInWithEmailAndPassword(auth, email, password);
 
   const loginWithGoogle = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const userRef = doc(db, "users", result.user.uid);
-      const snap = await getDoc(userRef);
-      if (!snap.exists()) await setDoc(userRef, { favorites: [], learned: [] });
-      await loadUserData(result.user.uid);
-      setUser(result.user);
-    } catch (err) {
-      console.error("❌ Google orqali kirishda xato:", err.message);
-      alert("Google orqali kirishda xatolik yuz berdi!");
-    }
+    const result = await signInWithPopup(auth, googleProvider);
+    const userRef = doc(db, "users", result.user.uid);
+    const snap = await getDoc(userRef);
+    if (!snap.exists()) await setDoc(userRef, { favorites: [], learned: [] });
+    await loadUserData(result.user.uid);
+    setUser(result.user);
   };
 
   const logout = async () => {
@@ -242,7 +232,6 @@ export const KanjiProvider = ({ children }) => {
     setUser(null);
     setFavorites([]);
     setLearned([]);
-    sessionStorage.removeItem("user");
   };
 
   // ============================
@@ -252,11 +241,11 @@ export const KanjiProvider = ({ children }) => {
     setDarkMode((prev) => {
       const newTheme = !prev;
       if (newTheme) {
-        document.documentElement.classList.add("light");
-        localStorage.setItem("theme", "light");
-      } else {
-        document.documentElement.classList.remove("light");
+        document.documentElement.classList.add("dark");
         localStorage.setItem("theme", "dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("theme", "light");
       }
       return newTheme;
     });
@@ -271,34 +260,30 @@ export const KanjiProvider = ({ children }) => {
   }, []);
 
   // ============================
-  // 🔸 Context return
+  // 🔸 Context qiymatlari
   // ============================
+  const value = {
+    kanjis,
+    levels,
+    loading,
+    error,
+    user,
+    authLoading,
+    favorites,
+    learned,
+    getKanjisByLevel: (level) =>
+      kanjis.filter((k) => k.level?.toLowerCase() === level?.toLowerCase()),
+    registerWithEmail,
+    loginWithEmail,
+    loginWithGoogle,
+    logout,
+    toggleFavorite,
+    toggleLearned,
+    darkMode,
+    toggleTheme,
+  };
+
   return (
-    <KanjiContext.Provider
-      value={{
-        kanjis,
-        levels,
-        loading,
-        error,
-        user,
-        authLoading,
-        favorites,
-        learned,
-        getKanjisByLevel: (level) =>
-          kanjis.filter((k) => k.level?.toLowerCase() === level?.toLowerCase()),
-        registerWithEmail,
-        loginWithEmail,
-        loginWithGoogle,
-        logout,
-        toggleFavorite,
-        toggleLearned,
-        darkMode,
-        toggleTheme,
-      }}
-    >
-      {children}
-    </KanjiContext.Provider>
+    <KanjiContext.Provider value={value}>{children}</KanjiContext.Provider>
   );
 };
-
-export const useKanjis = () => useContext(KanjiContext);

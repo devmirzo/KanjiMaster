@@ -17,6 +17,7 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #2f3d5d; 
-  background-color: #fcfaee; 
+  background-color: #2f3d5d;
+  background-color: #fcfaee;
 }
+@custom-variant dark (&:where(.dark, .dark *));
