@@ -1,5 +1,5 @@
 // src/pages/KanjiDetailPage.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -12,6 +12,33 @@ import {
 } from "lucide-react";
 import { useKanjis } from "../context/KanjiContext";
 import { Error, Loading } from "../components";
+
+// Helpers moved outside component so they aren't re-created on every render
+const safeParseExamples = (input) => {
+  if (!input) return [];
+  if (Array.isArray(input)) return input;
+  try {
+    const parsed = JSON.parse(input);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    // malformed JSON -> fallback
+    // eslint-disable-next-line no-console
+    console.warn("Failed to parse kanji examples:", e);
+    return [];
+  }
+};
+
+const playAudio = (url) => {
+  if (!url) return;
+  try {
+    const audio = new Audio(url);
+    // ignore promise from play(); browsers may require user gesture
+    void audio.play();
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error("Audio play failed:", e);
+  }
+};
 
 const KanjiDetailPage = () => {
   const { id } = useParams();
@@ -26,10 +53,18 @@ const KanjiDetailPage = () => {
     toggleLearned,
   } = useKanjis();
 
-  const kanji = kanjis.find((k) => String(k.id) === String(id));
-  const currentIndex = kanjis.findIndex((k) => String(k.id) === String(id));
-  const prevKanji = kanjis[currentIndex - 1];
-  const nextKanji = kanjis[currentIndex + 1];
+  const kanji = useMemo(
+    () => kanjis.find((k) => String(k.id) === String(id)),
+    [kanjis, id]
+  );
+
+  const currentIndex = useMemo(
+    () => kanjis.findIndex((k) => String(k.id) === String(id)),
+    [kanjis, id]
+  );
+
+  const prevKanji = useMemo(() => kanjis[currentIndex - 1], [kanjis, currentIndex]);
+  const nextKanji = useMemo(() => kanjis[currentIndex + 1], [kanjis, currentIndex]);
 
   useEffect(() => {
     document.title = kanji?.kanji_text
@@ -45,11 +80,10 @@ const KanjiDetailPage = () => {
   if (!kanji)
     return <Error message="Kanji topilmadi." onRetry={() => navigate(-1)} />;
 
-  const isFavorite = favorites.includes(kanji.id);
-  const isLearned = learned.includes(kanji.id);
-  const examples = Array.isArray(kanji.examples)
-    ? kanji.examples
-    : JSON.parse(kanji.examples || "[]");
+  const isFavorite = useMemo(() => !!kanji && favorites.includes(kanji.id), [favorites, kanji]);
+  const isLearned = useMemo(() => !!kanji && learned.includes(kanji.id), [learned, kanji]);
+
+  const examples = useMemo(() => safeParseExamples(kanji?.examples), [kanji?.examples]);
 
   const pageVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -227,7 +261,7 @@ const KanjiDetailPage = () => {
                       <td className="px-4 py-2">
                         {ex.audio && (
                           <button
-                            onClick={() => new Audio(ex.audio).play()}
+                            onClick={() => playAudio(ex.audio)}
                             className="flex h-8 w-8 items-center justify-center rounded-full bg-[#384B70] text-white transition hover:bg-[#2E3E5E] dark:bg-[#F2C46D] dark:text-[#1E2A3C] dark:hover:bg-[#E8E4D0]"
                           >
                             <img src="../../play.png" alt="play" />
