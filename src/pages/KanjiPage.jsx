@@ -158,16 +158,16 @@ const KanjiPage = () => {
         />
       </Helmet>
 
-      {/* Orqaga tugma */}
-      <motion.button
-        onClick={() => navigate(-1)}
-        aria-label="Orqaga qaytish"
-        className="mb-6 rounded-lg border-2 border-[#E5E5E0] bg-white px-4 py-2 font-semibold text-[#51648F] shadow-sm hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#F2C46D]"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        ← Orqaga
-      </motion.button>
+      {/* 🔙 Orqaga */}
+           <motion.button
+             onClick={() => navigate(-1)}
+             whileHover={{ scale: 1.05 }}
+             whileTap={{ scale: 0.95 }}
+             className="mb-6 flex items-center gap-2 rounded-lg border-2 border-[#E5E5E0] bg-white px-5 py-2 font-medium text-[#51648F] shadow-md transition hover:border-[#384B70] hover:bg-[#384B70] hover:text-white dark:border-[#2F3D57] dark:bg-[#263347] dark:text-[#F2C46D] dark:hover:border-[#F2C46D] dark:hover:bg-[#F2C46D] dark:hover:text-[#1E2A3C]"
+           >
+             <ArrowLeft className="h-5 w-5" />
+             Orqaga
+           </motion.button>
 
       {/* Sarlavha */}
       <motion.h1
