@@ -87,8 +87,10 @@ export const KanjiProvider = ({ children }) => {
   // ============================
   // 🔸 Supabase’dan Kanji olish
   // ============================
+
   useEffect(() => {
     let isMounted = true;
+
     const fetchKanjis = async () => {
       try {
         setLoading(true);
@@ -125,10 +127,11 @@ export const KanjiProvider = ({ children }) => {
     };
 
     fetchKanjis();
+
     return () => {
-      isMounted = false;
+      isMounted = false; // cleanup
     };
-  }, []);
+  }, []); // <-- Shu yerda dependency array tugadi
 
   // ============================
   // 🔸 Firestore foydalanuvchi ma’lumotlari
@@ -273,6 +276,7 @@ export const KanjiProvider = ({ children }) => {
     learned,
     getKanjisByLevel: (level) =>
       kanjis.filter((k) => k.level?.toLowerCase() === level?.toLowerCase()),
+    setUser,
     registerWithEmail,
     loginWithEmail,
     loginWithGoogle,

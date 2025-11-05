@@ -13,7 +13,7 @@ import {
 import { useKanjis } from "../context/KanjiContext";
 import { Error, Loading } from "../components";
 
-// Helpers moved outside component so they aren't re-created on every render
+// Helpers
 const safeParseExamples = (input) => {
   if (!input) return [];
   if (Array.isArray(input)) return input;
@@ -21,8 +21,6 @@ const safeParseExamples = (input) => {
     const parsed = JSON.parse(input);
     return Array.isArray(parsed) ? parsed : [];
   } catch (e) {
-    // malformed JSON -> fallback
-    // eslint-disable-next-line no-console
     console.warn("Failed to parse kanji examples:", e);
     return [];
   }
@@ -32,10 +30,8 @@ const playAudio = (url) => {
   if (!url) return;
   try {
     const audio = new Audio(url);
-    // ignore promise from play(); browsers may require user gesture
     void audio.play();
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error("Audio play failed:", e);
   }
 };
@@ -53,6 +49,7 @@ const KanjiDetailPage = () => {
     toggleLearned,
   } = useKanjis();
 
+  // ❗ Barcha hooklar komponentning yuqori qismida chaqiriladi
   const kanji = useMemo(
     () => kanjis.find((k) => String(k.id) === String(id)),
     [kanjis, id],
@@ -64,27 +61,17 @@ const KanjiDetailPage = () => {
   );
 
   const prevKanji = useMemo(
-    () => kanjis[currentIndex - 1],
+    () => (currentIndex > 0 ? kanjis[currentIndex - 1] : null),
     [kanjis, currentIndex],
   );
+
   const nextKanji = useMemo(
-    () => kanjis[currentIndex + 1],
+    () =>
+      currentIndex >= 0 && currentIndex < kanjis.length - 1
+        ? kanjis[currentIndex + 1]
+        : null,
     [kanjis, currentIndex],
   );
-
-  useEffect(() => {
-    document.title = kanji?.kanji_text
-      ? `${kanji.kanji_text} – Kanji tafsilotlari`
-      : "Kanji tafsilotlari yuklanmoqda...";
-  }, [kanji]);
-
-  if (loading) return <Loading />;
-  if (error)
-    return (
-      <Error message={error.message} onRetry={() => window.location.reload()} />
-    );
-  if (!kanji)
-    return <Error message="Kanji topilmadi." onRetry={() => navigate(-1)} />;
 
   const isFavorite = useMemo(
     () => !!kanji && favorites.includes(kanji.id),
@@ -94,12 +81,28 @@ const KanjiDetailPage = () => {
     () => !!kanji && learned.includes(kanji.id),
     [learned, kanji],
   );
-
   const examples = useMemo(
     () => safeParseExamples(kanji?.examples),
     [kanji?.examples],
   );
 
+  // Document title
+  useEffect(() => {
+    document.title = kanji?.kanji_text
+      ? `${kanji.kanji_text} – Kanji tafsilotlari`
+      : "Kanji tafsilotlari yuklanmoqda...";
+  }, [kanji]);
+
+  // Loading yoki error
+  if (loading) return <Loading />;
+  if (error)
+    return (
+      <Error message={error.message} onRetry={() => window.location.reload()} />
+    );
+  if (!kanji)
+    return <Error message="Kanji topilmadi." onRetry={() => navigate(-1)} />;
+
+  // Animation variants
   const pageVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -117,7 +120,7 @@ const KanjiDetailPage = () => {
       animate="visible"
       exit="hidden"
     >
-      {/* 🔙 Orqaga tugma */}
+      {/* 🔙 Orqaga */}
       <motion.button
         onClick={() => navigate(-1)}
         whileHover={{ scale: 1.05 }}
@@ -128,14 +131,14 @@ const KanjiDetailPage = () => {
         Orqaga
       </motion.button>
 
-      {/* 🔹 Kanji belgisi */}
+      {/* Kanji */}
       <motion.div className="mb-10 text-center">
         <motion.h1 className="text-[7rem] leading-none font-light text-[#384B70] drop-shadow-md sm:text-[9rem] lg:text-[11rem] dark:text-[#FCFAEE]">
           {kanji.kanji_text}
         </motion.h1>
       </motion.div>
 
-      {/* 🔹 Daraja va holatlar */}
+      {/* Daraja va holatlar */}
       <div className="mb-10 flex flex-col items-center gap-3">
         <motion.button
           onClick={() => navigate(`/kanji/${kanji.level}`)}
@@ -147,7 +150,7 @@ const KanjiDetailPage = () => {
         </motion.button>
 
         <div className="mt-3 flex">
-          {/* ❤️ Sevimli */}
+          {/* Sevimli */}
           <motion.button
             onClick={() => toggleFavorite(kanji.id)}
             whileHover={{ scale: 1.02 }}
@@ -160,7 +163,7 @@ const KanjiDetailPage = () => {
             {isFavorite ? <HeartOff size={20} /> : <Heart size={20} />}
           </motion.button>
 
-          {/* 📗 O'rganilgan */}
+          {/* O'rganilgan */}
           <motion.button
             onClick={() => toggleLearned(kanji.id)}
             whileHover={{ scale: 1.02 }}
@@ -175,9 +178,9 @@ const KanjiDetailPage = () => {
         </div>
       </div>
 
-      {/* 🔹 Asosiy konteyner */}
+      {/* Asosiy konteyner */}
       <motion.div className="mx-auto max-w-5xl space-y-6 rounded-2xl border-2 border-[#E5E5E0] bg-white p-6 shadow-lg dark:border-[#2F3D57] dark:bg-[#263347]">
-        {/* ✍️ Yozilish tartibi */}
+        {/* Yozilish tartibi */}
         {(kanji.stroke_video || kanji.stroke_order_svgs?.length > 0) && (
           <div className="text-center">
             <h2 className="mb-3 text-xl font-semibold text-[#2E2E2E] dark:text-white">
@@ -206,7 +209,7 @@ const KanjiDetailPage = () => {
           </div>
         )}
 
-        {/* 🈷️ On'yomi */}
+        {/* On'yomi */}
         <div>
           <h2 className="text-xl font-semibold text-[#2E2E2E] dark:text-white">
             On'yomi
@@ -216,7 +219,7 @@ const KanjiDetailPage = () => {
           </p>
         </div>
 
-        {/* 🈶 Kun'yomi */}
+        {/* Kun'yomi */}
         <div>
           <h2 className="text-xl font-semibold text-[#2E2E2E] dark:text-white">
             Kun'yomi
@@ -226,7 +229,7 @@ const KanjiDetailPage = () => {
           </p>
         </div>
 
-        {/* 🇯🇵 Tarjima */}
+        {/* Tarjima */}
         <div>
           <h2 className="text-xl font-semibold text-[#2E2E2E] dark:text-white">
             Tarjimasi
@@ -238,7 +241,7 @@ const KanjiDetailPage = () => {
           </p>
         </div>
 
-        {/* 📖 Misollar */}
+        {/* Misollar */}
         {examples.length > 0 && (
           <div>
             <h2 className="mb-3 text-xl font-semibold text-[#2E2E2E] dark:text-white">
@@ -292,7 +295,7 @@ const KanjiDetailPage = () => {
         )}
       </motion.div>
 
-      {/* ⬅️➡️ Navigatsiya */}
+      {/* Navigatsiya */}
       <div className="mx-auto mt-10 flex max-w-5xl justify-between">
         {prevKanji ? (
           <motion.button

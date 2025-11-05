@@ -26,7 +26,12 @@ const RegisterPage = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setUser(user);
+        setUser({
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        });
         navigate("/");
       }
     });
@@ -34,16 +39,24 @@ const RegisterPage = () => {
   }, [navigate, setUser]);
 
   const handleGoogleLogin = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const result = await signInWithPopup(auth, googleProvider);
-      setUser(result.user);
-      navigate("/");
-      setTimeout(() => {
-        toast.success(`Salom, ${result.user.displayName || "dasturchi"}! 👋`);
-      }, 300);
+      const user = result.user;
+
+      // foydalanuvchini kontekstga qo‘shish
+      setUser({
+        uid: user.uid,
+        displayName: user.displayName || "Dasturchi",
+        email: user.email,
+        photoURL: user.photoURL,
+      });
+
+      toast.success(`Salom, ${user.displayName || "Dasturchi"}! 👋`);
+      navigate("/"); // sahifaga yo‘naltirish
     } catch (error) {
-      toast.error("Google orqali kirishda xatolik yuz berdi!");
+      console.error("Google login error:", error);
+      toast.error("Google orqali kirishda xatolik yuz berdi! " + error.message);
     } finally {
       setLoading(false);
     }
@@ -63,12 +76,18 @@ const RegisterPage = () => {
         password,
       );
       await updateProfile(userCredential.user, { displayName: name });
-      setUser({ ...userCredential.user, displayName: name });
+
+      setUser({
+        uid: userCredential.user.uid,
+        displayName: name,
+        email: userCredential.user.email,
+        photoURL: userCredential.user.photoURL,
+      });
+
+      toast.success(`🎉 Xush kelibsiz, ${name}! 👋`);
       navigate("/");
-      setTimeout(() => {
-        toast.success(`🎉 Xush kelibsiz, ${name}! 👋`);
-      }, 300);
     } catch (error) {
+      console.error("Register error:", error);
       toast.error("Xatolik: " + error.message);
     } finally {
       setLoading(false);
@@ -104,6 +123,7 @@ const RegisterPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
+          {/* Ism */}
           <div>
             <label className="mb-1 block font-semibold text-[#2E2E2E] dark:text-white">
               Ism
@@ -120,6 +140,7 @@ const RegisterPage = () => {
             />
           </div>
 
+          {/* Email */}
           <div>
             <label className="mb-1 block font-semibold text-[#2E2E2E] dark:text-white">
               Email
@@ -136,6 +157,7 @@ const RegisterPage = () => {
             />
           </div>
 
+          {/* Parol */}
           <div>
             <label className="mb-1 block font-semibold text-[#2E2E2E] dark:text-white">
               Parol
@@ -152,6 +174,7 @@ const RegisterPage = () => {
             />
           </div>
 
+          {/* Parolni tasdiqlash */}
           <div>
             <label className="mb-1 block font-semibold text-[#2E2E2E] dark:text-white">
               Parolni tasdiqlang
@@ -184,6 +207,7 @@ const RegisterPage = () => {
           </motion.button>
         </motion.form>
 
+        {/* yoki separator */}
         <motion.div
           className="my-6 flex items-center"
           initial={{ opacity: 0 }}
@@ -197,6 +221,7 @@ const RegisterPage = () => {
           <div className="flex-grow border-t border-[#E5E5E0] dark:border-[#2F3D57]"></div>
         </motion.div>
 
+        {/* Google Login */}
         <motion.button
           onClick={handleGoogleLogin}
           disabled={loading}
