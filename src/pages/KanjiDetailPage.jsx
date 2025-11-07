@@ -100,7 +100,11 @@ const KanjiDetailPage = () => {
   // ✅ Helper: massivlarni chiroyli chiqarish
   const formatArray = (arr) => {
     if (!arr) return "";
-    if (Array.isArray(arr)) return arr.join("・");
+    if (Array.isArray(arr)) {
+      return arr
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // birinchi harfni katta qilish
+        .join("・"); // separator
+    }
     return arr;
   };
 
